@@ -28,6 +28,8 @@ type AllocationServiceClient interface {
 	FindAllocation(ctx context.Context, in *FindAllocationRequest, opts ...grpc.CallOption) (*FindAllocationResponse, error)
 	GetAllocation(ctx context.Context, in *GetAllocationRequest, opts ...grpc.CallOption) (*GetAllocationResponse, error)
 	ListAllocation(ctx context.Context, in *ListAllocationRequest, opts ...grpc.CallOption) (*ListAllocationResponse, error)
+	RequestSpace(ctx context.Context, in *RequestSpaceRequest, opts ...grpc.CallOption) (*RequestSpaceResponse, error)
+	ReleaseSpace(ctx context.Context, in *ReleaseSpaceRequest, opts ...grpc.CallOption) (*ReleaseSpaceResponse, error)
 }
 
 type allocationServiceClient struct {
@@ -92,6 +94,24 @@ func (c *allocationServiceClient) ListAllocation(ctx context.Context, in *ListAl
 	return out, nil
 }
 
+func (c *allocationServiceClient) RequestSpace(ctx context.Context, in *RequestSpaceRequest, opts ...grpc.CallOption) (*RequestSpaceResponse, error) {
+	out := new(RequestSpaceResponse)
+	err := c.cc.Invoke(ctx, "/v1.AllocationService/RequestSpace", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *allocationServiceClient) ReleaseSpace(ctx context.Context, in *ReleaseSpaceRequest, opts ...grpc.CallOption) (*ReleaseSpaceResponse, error) {
+	out := new(ReleaseSpaceResponse)
+	err := c.cc.Invoke(ctx, "/v1.AllocationService/ReleaseSpace", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AllocationServiceServer is the server API for AllocationService service.
 // All implementations must embed UnimplementedAllocationServiceServer
 // for forward compatibility
@@ -102,6 +122,8 @@ type AllocationServiceServer interface {
 	FindAllocation(context.Context, *FindAllocationRequest) (*FindAllocationResponse, error)
 	GetAllocation(context.Context, *GetAllocationRequest) (*GetAllocationResponse, error)
 	ListAllocation(context.Context, *ListAllocationRequest) (*ListAllocationResponse, error)
+	RequestSpace(context.Context, *RequestSpaceRequest) (*RequestSpaceResponse, error)
+	ReleaseSpace(context.Context, *ReleaseSpaceRequest) (*ReleaseSpaceResponse, error)
 	mustEmbedUnimplementedAllocationServiceServer()
 }
 
@@ -126,6 +148,12 @@ func (UnimplementedAllocationServiceServer) GetAllocation(context.Context, *GetA
 }
 func (UnimplementedAllocationServiceServer) ListAllocation(context.Context, *ListAllocationRequest) (*ListAllocationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListAllocation not implemented")
+}
+func (UnimplementedAllocationServiceServer) RequestSpace(context.Context, *RequestSpaceRequest) (*RequestSpaceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RequestSpace not implemented")
+}
+func (UnimplementedAllocationServiceServer) ReleaseSpace(context.Context, *ReleaseSpaceRequest) (*ReleaseSpaceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReleaseSpace not implemented")
 }
 func (UnimplementedAllocationServiceServer) mustEmbedUnimplementedAllocationServiceServer() {}
 
@@ -248,6 +276,42 @@ func _AllocationService_ListAllocation_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AllocationService_RequestSpace_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RequestSpaceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AllocationServiceServer).RequestSpace(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/v1.AllocationService/RequestSpace",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AllocationServiceServer).RequestSpace(ctx, req.(*RequestSpaceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AllocationService_ReleaseSpace_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReleaseSpaceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AllocationServiceServer).ReleaseSpace(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/v1.AllocationService/ReleaseSpace",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AllocationServiceServer).ReleaseSpace(ctx, req.(*ReleaseSpaceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AllocationService_ServiceDesc is the grpc.ServiceDesc for AllocationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -278,6 +342,14 @@ var AllocationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListAllocation",
 			Handler:    _AllocationService_ListAllocation_Handler,
+		},
+		{
+			MethodName: "RequestSpace",
+			Handler:    _AllocationService_RequestSpace_Handler,
+		},
+		{
+			MethodName: "ReleaseSpace",
+			Handler:    _AllocationService_ReleaseSpace_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
