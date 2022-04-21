@@ -31,7 +31,7 @@ func RegisterUploadHTTPServer(s *http.Server, srv UploadHTTPServer) {
 	r.GET("/api/v1/upload/file/{id}", _Upload_GetFile0_HTTP_Handler(srv))
 	r.POST("/api/v1/upload/check", _Upload_CheckBlock0_HTTP_Handler(srv))
 	r.DELETE("/api/v1/upload/file/{id}", _Upload_DeleteFile0_HTTP_Handler(srv))
-	r.POST("/api/v1/upload/file", _Upload_MergeFile0_HTTP_Handler(srv))
+	r.POST("/api/v1/upload/merge", _Upload_MergeFile0_HTTP_Handler(srv))
 }
 
 func _Upload_CreateFile0_HTTP_Handler(srv UploadHTTPServer) func(ctx http.Context) error {
@@ -205,7 +205,7 @@ func (c *UploadHTTPClientImpl) GetFile(ctx context.Context, in *GetFileRequest, 
 
 func (c *UploadHTTPClientImpl) MergeFile(ctx context.Context, in *MergeFileRequest, opts ...http.CallOption) (*MergeFileReply, error) {
 	var out MergeFileReply
-	pattern := "/api/v1/upload/file"
+	pattern := "/api/v1/upload/merge"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/api.upload.v1.Upload/MergeFile"))
 	opts = append(opts, http.PathTemplate(pattern))
