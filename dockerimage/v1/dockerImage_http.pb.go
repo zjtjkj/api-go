@@ -26,8 +26,8 @@ type DockerImageHTTPServer interface {
 func RegisterDockerImageHTTPServer(s *http.Server, srv DockerImageHTTPServer) {
 	r := s.Route("/")
 	r.POST("/api/v1/docker/load", _DockerImage_LoadDockerImage0_HTTP_Handler(srv))
-	r.POST("/api/v1/docker/upload", _DockerImage_PushDockerImage0_HTTP_Handler(srv))
-	r.POST("/api/v1/docker/upload", _DockerImage_DeleteRemoteDockerImage0_HTTP_Handler(srv))
+	r.POST("/api/v1/docker/install", _DockerImage_PushDockerImage0_HTTP_Handler(srv))
+	r.POST("/api/v1/docker/uninstall", _DockerImage_DeleteRemoteDockerImage0_HTTP_Handler(srv))
 }
 
 func _DockerImage_LoadDockerImage0_HTTP_Handler(srv DockerImageHTTPServer) func(ctx http.Context) error {
@@ -103,7 +103,7 @@ func NewDockerImageHTTPClient(client *http.Client) DockerImageHTTPClient {
 
 func (c *DockerImageHTTPClientImpl) DeleteRemoteDockerImage(ctx context.Context, in *DeleteRemoteDockerImageRequest, opts ...http.CallOption) (*DeleteRemoteDockerImageReply, error) {
 	var out DeleteRemoteDockerImageReply
-	pattern := "/api/v1/docker/upload"
+	pattern := "/api/v1/docker/uninstall"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/api.dockerimage.v1.DockerImage/DeleteRemoteDockerImage"))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -129,7 +129,7 @@ func (c *DockerImageHTTPClientImpl) LoadDockerImage(ctx context.Context, in *Loa
 
 func (c *DockerImageHTTPClientImpl) PushDockerImage(ctx context.Context, in *PushDockerImageRequest, opts ...http.CallOption) (*PushDockerImageReply, error) {
 	var out PushDockerImageReply
-	pattern := "/api/v1/docker/upload"
+	pattern := "/api/v1/docker/install"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation("/api.dockerimage.v1.DockerImage/PushDockerImage"))
 	opts = append(opts, http.PathTemplate(pattern))
