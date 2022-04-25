@@ -19,15 +19,36 @@ const _ = http.SupportPackageIsVersion1
 
 type DockerImageHTTPServer interface {
 	DeleteRemoteDockerImage(context.Context, *DeleteRemoteDockerImageRequest) (*DeleteRemoteDockerImageReply, error)
+	GetRegistry(context.Context, *GetRegistryRequest) (*GetRegistryResponse, error)
 	LoadDockerImage(context.Context, *LoadDockerImageRequest) (*LoadDockerImageReply, error)
 	PushDockerImage(context.Context, *PushDockerImageRequest) (*PushDockerImageReply, error)
 }
 
 func RegisterDockerImageHTTPServer(s *http.Server, srv DockerImageHTTPServer) {
 	r := s.Route("/")
+	r.GET("/api/v1/docker/registry", _DockerImage_GetRegistry0_HTTP_Handler(srv))
 	r.POST("/api/v1/docker/load", _DockerImage_LoadDockerImage0_HTTP_Handler(srv))
 	r.POST("/api/v1/docker/install", _DockerImage_PushDockerImage0_HTTP_Handler(srv))
 	r.POST("/api/v1/docker/uninstall", _DockerImage_DeleteRemoteDockerImage0_HTTP_Handler(srv))
+}
+
+func _DockerImage_GetRegistry0_HTTP_Handler(srv DockerImageHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetRegistryRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, "/api.dockerimage.v1.DockerImage/GetRegistry")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetRegistry(ctx, req.(*GetRegistryRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetRegistryResponse)
+		return ctx.Result(200, reply)
+	}
 }
 
 func _DockerImage_LoadDockerImage0_HTTP_Handler(srv DockerImageHTTPServer) func(ctx http.Context) error {
@@ -89,6 +110,7 @@ func _DockerImage_DeleteRemoteDockerImage0_HTTP_Handler(srv DockerImageHTTPServe
 
 type DockerImageHTTPClient interface {
 	DeleteRemoteDockerImage(ctx context.Context, req *DeleteRemoteDockerImageRequest, opts ...http.CallOption) (rsp *DeleteRemoteDockerImageReply, err error)
+	GetRegistry(ctx context.Context, req *GetRegistryRequest, opts ...http.CallOption) (rsp *GetRegistryResponse, err error)
 	LoadDockerImage(ctx context.Context, req *LoadDockerImageRequest, opts ...http.CallOption) (rsp *LoadDockerImageReply, err error)
 	PushDockerImage(ctx context.Context, req *PushDockerImageRequest, opts ...http.CallOption) (rsp *PushDockerImageReply, err error)
 }
@@ -108,6 +130,19 @@ func (c *DockerImageHTTPClientImpl) DeleteRemoteDockerImage(ctx context.Context,
 	opts = append(opts, http.Operation("/api.dockerimage.v1.DockerImage/DeleteRemoteDockerImage"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *DockerImageHTTPClientImpl) GetRegistry(ctx context.Context, in *GetRegistryRequest, opts ...http.CallOption) (*GetRegistryResponse, error) {
+	var out GetRegistryResponse
+	pattern := "/api/v1/docker/registry"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation("/api.dockerimage.v1.DockerImage/GetRegistry"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

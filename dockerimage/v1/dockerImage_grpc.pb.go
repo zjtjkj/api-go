@@ -22,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DockerImageClient interface {
+	GetRegistry(ctx context.Context, in *GetRegistryRequest, opts ...grpc.CallOption) (*GetRegistryResponse, error)
 	LoadDockerImage(ctx context.Context, in *LoadDockerImageRequest, opts ...grpc.CallOption) (*LoadDockerImageReply, error)
 	PushDockerImage(ctx context.Context, in *PushDockerImageRequest, opts ...grpc.CallOption) (*PushDockerImageReply, error)
 	DeleteRemoteDockerImage(ctx context.Context, in *DeleteRemoteDockerImageRequest, opts ...grpc.CallOption) (*DeleteRemoteDockerImageReply, error)
@@ -33,6 +34,15 @@ type dockerImageClient struct {
 
 func NewDockerImageClient(cc grpc.ClientConnInterface) DockerImageClient {
 	return &dockerImageClient{cc}
+}
+
+func (c *dockerImageClient) GetRegistry(ctx context.Context, in *GetRegistryRequest, opts ...grpc.CallOption) (*GetRegistryResponse, error) {
+	out := new(GetRegistryResponse)
+	err := c.cc.Invoke(ctx, "/api.dockerimage.v1.DockerImage/GetRegistry", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *dockerImageClient) LoadDockerImage(ctx context.Context, in *LoadDockerImageRequest, opts ...grpc.CallOption) (*LoadDockerImageReply, error) {
@@ -66,6 +76,7 @@ func (c *dockerImageClient) DeleteRemoteDockerImage(ctx context.Context, in *Del
 // All implementations must embed UnimplementedDockerImageServer
 // for forward compatibility
 type DockerImageServer interface {
+	GetRegistry(context.Context, *GetRegistryRequest) (*GetRegistryResponse, error)
 	LoadDockerImage(context.Context, *LoadDockerImageRequest) (*LoadDockerImageReply, error)
 	PushDockerImage(context.Context, *PushDockerImageRequest) (*PushDockerImageReply, error)
 	DeleteRemoteDockerImage(context.Context, *DeleteRemoteDockerImageRequest) (*DeleteRemoteDockerImageReply, error)
@@ -76,6 +87,9 @@ type DockerImageServer interface {
 type UnimplementedDockerImageServer struct {
 }
 
+func (UnimplementedDockerImageServer) GetRegistry(context.Context, *GetRegistryRequest) (*GetRegistryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRegistry not implemented")
+}
 func (UnimplementedDockerImageServer) LoadDockerImage(context.Context, *LoadDockerImageRequest) (*LoadDockerImageReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoadDockerImage not implemented")
 }
@@ -96,6 +110,24 @@ type UnsafeDockerImageServer interface {
 
 func RegisterDockerImageServer(s grpc.ServiceRegistrar, srv DockerImageServer) {
 	s.RegisterService(&DockerImage_ServiceDesc, srv)
+}
+
+func _DockerImage_GetRegistry_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRegistryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DockerImageServer).GetRegistry(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.dockerimage.v1.DockerImage/GetRegistry",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DockerImageServer).GetRegistry(ctx, req.(*GetRegistryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _DockerImage_LoadDockerImage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -159,6 +191,10 @@ var DockerImage_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "api.dockerimage.v1.DockerImage",
 	HandlerType: (*DockerImageServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetRegistry",
+			Handler:    _DockerImage_GetRegistry_Handler,
+		},
 		{
 			MethodName: "LoadDockerImage",
 			Handler:    _DockerImage_LoadDockerImage_Handler,
