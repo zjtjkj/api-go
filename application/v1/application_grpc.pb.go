@@ -27,6 +27,7 @@ type ApplicationServiceClient interface {
 	UpdateApp(ctx context.Context, in *UpdateAppRequest, opts ...grpc.CallOption) (*UpdateAppResponse, error)
 	FindApp(ctx context.Context, in *FindAppRequest, opts ...grpc.CallOption) (*FindAppResponse, error)
 	GetApp(ctx context.Context, in *GetAppRequest, opts ...grpc.CallOption) (*GetAppResponse, error)
+	ListStates(ctx context.Context, in *ListStatesRequest, opts ...grpc.CallOption) (*ListStatesResponse, error)
 }
 
 type applicationServiceClient struct {
@@ -82,6 +83,15 @@ func (c *applicationServiceClient) GetApp(ctx context.Context, in *GetAppRequest
 	return out, nil
 }
 
+func (c *applicationServiceClient) ListStates(ctx context.Context, in *ListStatesRequest, opts ...grpc.CallOption) (*ListStatesResponse, error) {
+	out := new(ListStatesResponse)
+	err := c.cc.Invoke(ctx, "/application.ApplicationService/ListStates", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ApplicationServiceServer is the server API for ApplicationService service.
 // All implementations must embed UnimplementedApplicationServiceServer
 // for forward compatibility
@@ -91,6 +101,7 @@ type ApplicationServiceServer interface {
 	UpdateApp(context.Context, *UpdateAppRequest) (*UpdateAppResponse, error)
 	FindApp(context.Context, *FindAppRequest) (*FindAppResponse, error)
 	GetApp(context.Context, *GetAppRequest) (*GetAppResponse, error)
+	ListStates(context.Context, *ListStatesRequest) (*ListStatesResponse, error)
 	mustEmbedUnimplementedApplicationServiceServer()
 }
 
@@ -112,6 +123,9 @@ func (UnimplementedApplicationServiceServer) FindApp(context.Context, *FindAppRe
 }
 func (UnimplementedApplicationServiceServer) GetApp(context.Context, *GetAppRequest) (*GetAppResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetApp not implemented")
+}
+func (UnimplementedApplicationServiceServer) ListStates(context.Context, *ListStatesRequest) (*ListStatesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListStates not implemented")
 }
 func (UnimplementedApplicationServiceServer) mustEmbedUnimplementedApplicationServiceServer() {}
 
@@ -216,6 +230,24 @@ func _ApplicationService_GetApp_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApplicationService_ListStates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListStatesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationServiceServer).ListStates(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.ApplicationService/ListStates",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationServiceServer).ListStates(ctx, req.(*ListStatesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ApplicationService_ServiceDesc is the grpc.ServiceDesc for ApplicationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -242,6 +274,10 @@ var ApplicationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetApp",
 			Handler:    _ApplicationService_GetApp_Handler,
+		},
+		{
+			MethodName: "ListStates",
+			Handler:    _ApplicationService_ListStates_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

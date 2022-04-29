@@ -797,6 +797,154 @@ func (x *GetAppResponse) GetAuthServer() *AuthServer {
 	return nil
 }
 
+type State struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id       uint32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name     string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Describe string `protobuf:"bytes,3,opt,name=describe,proto3" json:"describe,omitempty"`
+}
+
+func (x *State) Reset() {
+	*x = State{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_application_v1_application_proto_msgTypes[13]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *State) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*State) ProtoMessage() {}
+
+func (x *State) ProtoReflect() protoreflect.Message {
+	mi := &file_api_application_v1_application_proto_msgTypes[13]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use State.ProtoReflect.Descriptor instead.
+func (*State) Descriptor() ([]byte, []int) {
+	return file_api_application_v1_application_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *State) GetId() uint32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *State) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *State) GetDescribe() string {
+	if x != nil {
+		return x.Describe
+	}
+	return ""
+}
+
+type ListStatesRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *ListStatesRequest) Reset() {
+	*x = ListStatesRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_application_v1_application_proto_msgTypes[14]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListStatesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListStatesRequest) ProtoMessage() {}
+
+func (x *ListStatesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_application_v1_application_proto_msgTypes[14]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListStatesRequest.ProtoReflect.Descriptor instead.
+func (*ListStatesRequest) Descriptor() ([]byte, []int) {
+	return file_api_application_v1_application_proto_rawDescGZIP(), []int{14}
+}
+
+type ListStatesResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	States []*State `protobuf:"bytes,1,rep,name=states,proto3" json:"states,omitempty"`
+}
+
+func (x *ListStatesResponse) Reset() {
+	*x = ListStatesResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_application_v1_application_proto_msgTypes[15]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListStatesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListStatesResponse) ProtoMessage() {}
+
+func (x *ListStatesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_application_v1_application_proto_msgTypes[15]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListStatesResponse.ProtoReflect.Descriptor instead.
+func (*ListStatesResponse) Descriptor() ([]byte, []int) {
+	return file_api_application_v1_application_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *ListStatesResponse) GetStates() []*State {
+	if x != nil {
+		return x.States
+	}
+	return nil
+}
+
 var File_api_application_v1_application_proto protoreflect.FileDescriptor
 
 var file_api_application_v1_application_proto_rawDesc = []byte{
@@ -879,7 +1027,17 @@ var file_api_application_v1_application_proto_rawDesc = []byte{
 	0x0b, 0x61, 0x75, 0x74, 0x68, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01,
 	0x28, 0x0b, 0x32, 0x17, 0x2e, 0x61, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e,
 	0x2e, 0x41, 0x75, 0x74, 0x68, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x52, 0x0a, 0x61, 0x75, 0x74,
-	0x68, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x32, 0x81, 0x03, 0x0a, 0x12, 0x41, 0x70, 0x70, 0x6c,
+	0x68, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x22, 0x47, 0x0a, 0x05, 0x53, 0x74, 0x61, 0x74, 0x65,
+	0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x02, 0x69, 0x64,
+	0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
+	0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65,
+	0x22, 0x13, 0x0a, 0x11, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x74, 0x61, 0x74, 0x65, 0x73, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x40, 0x0a, 0x12, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x74, 0x61,
+	0x74, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2a, 0x0a, 0x06, 0x73,
+	0x74, 0x61, 0x74, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x61, 0x70,
+	0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x53, 0x74, 0x61, 0x74, 0x65, 0x52,
+	0x06, 0x73, 0x74, 0x61, 0x74, 0x65, 0x73, 0x32, 0xd0, 0x03, 0x0a, 0x12, 0x41, 0x70, 0x70, 0x6c,
 	0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x4a,
 	0x0a, 0x09, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x41, 0x70, 0x70, 0x12, 0x1d, 0x2e, 0x61, 0x70,
 	0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65,
@@ -903,9 +1061,14 @@ var file_api_application_v1_application_proto_rawDesc = []byte{
 	0x70, 0x70, 0x12, 0x1a, 0x2e, 0x61, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e,
 	0x2e, 0x47, 0x65, 0x74, 0x41, 0x70, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b,
 	0x2e, 0x61, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x47, 0x65, 0x74,
-	0x41, 0x70, 0x70, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x19, 0x5a, 0x17, 0x2e,
-	0x2f, 0x61, 0x70, 0x69, 0x2f, 0x61, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x2f, 0x76, 0x31, 0x3b, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x41, 0x70, 0x70, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4d, 0x0a, 0x0a, 0x4c,
+	0x69, 0x73, 0x74, 0x53, 0x74, 0x61, 0x74, 0x65, 0x73, 0x12, 0x1e, 0x2e, 0x61, 0x70, 0x70, 0x6c,
+	0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x74, 0x61, 0x74,
+	0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1f, 0x2e, 0x61, 0x70, 0x70, 0x6c,
+	0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x53, 0x74, 0x61, 0x74,
+	0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x19, 0x5a, 0x17, 0x2e, 0x2f,
+	0x61, 0x70, 0x69, 0x2f, 0x61, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2f,
+	0x76, 0x31, 0x3b, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -920,21 +1083,24 @@ func file_api_application_v1_application_proto_rawDescGZIP() []byte {
 	return file_api_application_v1_application_proto_rawDescData
 }
 
-var file_api_application_v1_application_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_api_application_v1_application_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
 var file_api_application_v1_application_proto_goTypes = []interface{}{
-	(*Application)(nil),       // 0: application.Application
-	(*AuthServer)(nil),        // 1: application.AuthServer
-	(*Pod)(nil),               // 2: application.Pod
-	(*CreateAppRequest)(nil),  // 3: application.CreateAppRequest
-	(*CreateAppResponse)(nil), // 4: application.CreateAppResponse
-	(*DeleteAppRequest)(nil),  // 5: application.DeleteAppRequest
-	(*DeleteAppResponse)(nil), // 6: application.DeleteAppResponse
-	(*UpdateAppRequest)(nil),  // 7: application.UpdateAppRequest
-	(*UpdateAppResponse)(nil), // 8: application.UpdateAppResponse
-	(*FindAppRequest)(nil),    // 9: application.FindAppRequest
-	(*FindAppResponse)(nil),   // 10: application.FindAppResponse
-	(*GetAppRequest)(nil),     // 11: application.GetAppRequest
-	(*GetAppResponse)(nil),    // 12: application.GetAppResponse
+	(*Application)(nil),        // 0: application.Application
+	(*AuthServer)(nil),         // 1: application.AuthServer
+	(*Pod)(nil),                // 2: application.Pod
+	(*CreateAppRequest)(nil),   // 3: application.CreateAppRequest
+	(*CreateAppResponse)(nil),  // 4: application.CreateAppResponse
+	(*DeleteAppRequest)(nil),   // 5: application.DeleteAppRequest
+	(*DeleteAppResponse)(nil),  // 6: application.DeleteAppResponse
+	(*UpdateAppRequest)(nil),   // 7: application.UpdateAppRequest
+	(*UpdateAppResponse)(nil),  // 8: application.UpdateAppResponse
+	(*FindAppRequest)(nil),     // 9: application.FindAppRequest
+	(*FindAppResponse)(nil),    // 10: application.FindAppResponse
+	(*GetAppRequest)(nil),      // 11: application.GetAppRequest
+	(*GetAppResponse)(nil),     // 12: application.GetAppResponse
+	(*State)(nil),              // 13: application.State
+	(*ListStatesRequest)(nil),  // 14: application.ListStatesRequest
+	(*ListStatesResponse)(nil), // 15: application.ListStatesResponse
 }
 var file_api_application_v1_application_proto_depIdxs = []int32{
 	0,  // 0: application.CreateAppRequest.app:type_name -> application.Application
@@ -944,21 +1110,24 @@ var file_api_application_v1_application_proto_depIdxs = []int32{
 	0,  // 4: application.FindAppResponse.apps:type_name -> application.Application
 	0,  // 5: application.GetAppResponse.app:type_name -> application.Application
 	1,  // 6: application.GetAppResponse.auth_server:type_name -> application.AuthServer
-	3,  // 7: application.ApplicationService.CreateApp:input_type -> application.CreateAppRequest
-	5,  // 8: application.ApplicationService.DeleteApp:input_type -> application.DeleteAppRequest
-	7,  // 9: application.ApplicationService.UpdateApp:input_type -> application.UpdateAppRequest
-	9,  // 10: application.ApplicationService.FindApp:input_type -> application.FindAppRequest
-	11, // 11: application.ApplicationService.GetApp:input_type -> application.GetAppRequest
-	4,  // 12: application.ApplicationService.CreateApp:output_type -> application.CreateAppResponse
-	6,  // 13: application.ApplicationService.DeleteApp:output_type -> application.DeleteAppResponse
-	8,  // 14: application.ApplicationService.UpdateApp:output_type -> application.UpdateAppResponse
-	10, // 15: application.ApplicationService.FindApp:output_type -> application.FindAppResponse
-	12, // 16: application.ApplicationService.GetApp:output_type -> application.GetAppResponse
-	12, // [12:17] is the sub-list for method output_type
-	7,  // [7:12] is the sub-list for method input_type
-	7,  // [7:7] is the sub-list for extension type_name
-	7,  // [7:7] is the sub-list for extension extendee
-	0,  // [0:7] is the sub-list for field type_name
+	13, // 7: application.ListStatesResponse.states:type_name -> application.State
+	3,  // 8: application.ApplicationService.CreateApp:input_type -> application.CreateAppRequest
+	5,  // 9: application.ApplicationService.DeleteApp:input_type -> application.DeleteAppRequest
+	7,  // 10: application.ApplicationService.UpdateApp:input_type -> application.UpdateAppRequest
+	9,  // 11: application.ApplicationService.FindApp:input_type -> application.FindAppRequest
+	11, // 12: application.ApplicationService.GetApp:input_type -> application.GetAppRequest
+	14, // 13: application.ApplicationService.ListStates:input_type -> application.ListStatesRequest
+	4,  // 14: application.ApplicationService.CreateApp:output_type -> application.CreateAppResponse
+	6,  // 15: application.ApplicationService.DeleteApp:output_type -> application.DeleteAppResponse
+	8,  // 16: application.ApplicationService.UpdateApp:output_type -> application.UpdateAppResponse
+	10, // 17: application.ApplicationService.FindApp:output_type -> application.FindAppResponse
+	12, // 18: application.ApplicationService.GetApp:output_type -> application.GetAppResponse
+	15, // 19: application.ApplicationService.ListStates:output_type -> application.ListStatesResponse
+	14, // [14:20] is the sub-list for method output_type
+	8,  // [8:14] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_api_application_v1_application_proto_init() }
@@ -1123,6 +1292,42 @@ func file_api_application_v1_application_proto_init() {
 				return nil
 			}
 		}
+		file_api_application_v1_application_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*State); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_application_v1_application_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListStatesRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_application_v1_application_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListStatesResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -1130,7 +1335,7 @@ func file_api_application_v1_application_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_api_application_v1_application_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   13,
+			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
