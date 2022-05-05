@@ -28,6 +28,9 @@ type ImageClient interface {
 	GetImage(ctx context.Context, in *GetImageRequest, opts ...grpc.CallOption) (*GetImageReply, error)
 	GetImageByNameVersion(ctx context.Context, in *GetImageByNameVersionRequest, opts ...grpc.CallOption) (*GetImageByNameVersionReply, error)
 	ListImage(ctx context.Context, in *ListImageRequest, opts ...grpc.CallOption) (*ListImageReply, error)
+	ListAvailableImage(ctx context.Context, in *ListAvailableImageRequest, opts ...grpc.CallOption) (*ListAvailableImageReply, error)
+	LockImage(ctx context.Context, in *LockImageRequest, opts ...grpc.CallOption) (*LockImageReply, error)
+	UnlockImage(ctx context.Context, in *UnlockImageRequest, opts ...grpc.CallOption) (*UnlockImageReply, error)
 }
 
 type imageClient struct {
@@ -92,6 +95,33 @@ func (c *imageClient) ListImage(ctx context.Context, in *ListImageRequest, opts 
 	return out, nil
 }
 
+func (c *imageClient) ListAvailableImage(ctx context.Context, in *ListAvailableImageRequest, opts ...grpc.CallOption) (*ListAvailableImageReply, error) {
+	out := new(ListAvailableImageReply)
+	err := c.cc.Invoke(ctx, "/api.image.v1.Image/ListAvailableImage", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *imageClient) LockImage(ctx context.Context, in *LockImageRequest, opts ...grpc.CallOption) (*LockImageReply, error) {
+	out := new(LockImageReply)
+	err := c.cc.Invoke(ctx, "/api.image.v1.Image/LockImage", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *imageClient) UnlockImage(ctx context.Context, in *UnlockImageRequest, opts ...grpc.CallOption) (*UnlockImageReply, error) {
+	out := new(UnlockImageReply)
+	err := c.cc.Invoke(ctx, "/api.image.v1.Image/UnlockImage", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ImageServer is the server API for Image service.
 // All implementations must embed UnimplementedImageServer
 // for forward compatibility
@@ -102,6 +132,9 @@ type ImageServer interface {
 	GetImage(context.Context, *GetImageRequest) (*GetImageReply, error)
 	GetImageByNameVersion(context.Context, *GetImageByNameVersionRequest) (*GetImageByNameVersionReply, error)
 	ListImage(context.Context, *ListImageRequest) (*ListImageReply, error)
+	ListAvailableImage(context.Context, *ListAvailableImageRequest) (*ListAvailableImageReply, error)
+	LockImage(context.Context, *LockImageRequest) (*LockImageReply, error)
+	UnlockImage(context.Context, *UnlockImageRequest) (*UnlockImageReply, error)
 	mustEmbedUnimplementedImageServer()
 }
 
@@ -126,6 +159,15 @@ func (UnimplementedImageServer) GetImageByNameVersion(context.Context, *GetImage
 }
 func (UnimplementedImageServer) ListImage(context.Context, *ListImageRequest) (*ListImageReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListImage not implemented")
+}
+func (UnimplementedImageServer) ListAvailableImage(context.Context, *ListAvailableImageRequest) (*ListAvailableImageReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListAvailableImage not implemented")
+}
+func (UnimplementedImageServer) LockImage(context.Context, *LockImageRequest) (*LockImageReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LockImage not implemented")
+}
+func (UnimplementedImageServer) UnlockImage(context.Context, *UnlockImageRequest) (*UnlockImageReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UnlockImage not implemented")
 }
 func (UnimplementedImageServer) mustEmbedUnimplementedImageServer() {}
 
@@ -248,6 +290,60 @@ func _Image_ListImage_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Image_ListAvailableImage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListAvailableImageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ImageServer).ListAvailableImage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.image.v1.Image/ListAvailableImage",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ImageServer).ListAvailableImage(ctx, req.(*ListAvailableImageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Image_LockImage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LockImageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ImageServer).LockImage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.image.v1.Image/LockImage",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ImageServer).LockImage(ctx, req.(*LockImageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Image_UnlockImage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UnlockImageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ImageServer).UnlockImage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.image.v1.Image/UnlockImage",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ImageServer).UnlockImage(ctx, req.(*UnlockImageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Image_ServiceDesc is the grpc.ServiceDesc for Image service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -278,6 +374,18 @@ var Image_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListImage",
 			Handler:    _Image_ListImage_Handler,
+		},
+		{
+			MethodName: "ListAvailableImage",
+			Handler:    _Image_ListAvailableImage_Handler,
+		},
+		{
+			MethodName: "LockImage",
+			Handler:    _Image_LockImage_Handler,
+		},
+		{
+			MethodName: "UnlockImage",
+			Handler:    _Image_UnlockImage_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
