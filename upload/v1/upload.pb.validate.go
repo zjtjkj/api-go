@@ -58,9 +58,63 @@ func (m *File) validate(all bool) error {
 
 	// no validation rules for Id
 
-	// no validation rules for CreatedAt
+	if all {
+		switch v := interface{}(m.GetCreatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, FileValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, FileValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return FileValidationError{
+				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
-	// no validation rules for UploadedAt
+	if all {
+		switch v := interface{}(m.GetUploadedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, FileValidationError{
+					field:  "UploadedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, FileValidationError{
+					field:  "UploadedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUploadedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return FileValidationError{
+				field:  "UploadedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	// no validation rules for Hash
 
@@ -394,7 +448,17 @@ func (m *GetFileRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	if utf8.RuneCountInString(m.GetId()) != 36 {
+		err := GetFileRequestValidationError{
+			field:  "Id",
+			reason: "value length must be 36 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+
+	}
 
 	if len(errors) > 0 {
 		return GetFileRequestMultiError(errors)
@@ -624,11 +688,31 @@ func (m *CheckBlockRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	if utf8.RuneCountInString(m.GetId()) != 36 {
+		err := CheckBlockRequestValidationError{
+			field:  "Id",
+			reason: "value length must be 36 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+
+	}
 
 	// no validation rules for Index
 
-	// no validation rules for Hash
+	if utf8.RuneCountInString(m.GetHash()) != 16 {
+		err := CheckBlockRequestValidationError{
+			field:  "Hash",
+			reason: "value length must be 16 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+
+	}
 
 	if len(errors) > 0 {
 		return CheckBlockRequestMultiError(errors)
@@ -832,7 +916,17 @@ func (m *DeleteFileRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	if utf8.RuneCountInString(m.GetId()) != 36 {
+		err := DeleteFileRequestValidationError{
+			field:  "Id",
+			reason: "value length must be 36 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+
+	}
 
 	if len(errors) > 0 {
 		return DeleteFileRequestMultiError(errors)
@@ -1038,7 +1132,17 @@ func (m *MergeFileRequest) validate(all bool) error {
 
 	// no validation rules for Id
 
-	// no validation rules for Hash
+	if utf8.RuneCountInString(m.GetHash()) != 16 {
+		err := MergeFileRequestValidationError{
+			field:  "Hash",
+			reason: "value length must be 16 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+
+	}
 
 	if len(errors) > 0 {
 		return MergeFileRequestMultiError(errors)
