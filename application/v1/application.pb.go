@@ -25,17 +25,17 @@ type Application struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id        uint32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name      string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Replicas  uint32 `protobuf:"varint,3,opt,name=replicas,proto3" json:"replicas,omitempty"`
-	PlanId    uint32 `protobuf:"varint,4,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`
-	State     string `protobuf:"bytes,5,opt,name=state,proto3" json:"state,omitempty"`
-	StateId   uint32 `protobuf:"varint,6,opt,name=state_id,json=stateId,proto3" json:"state_id,omitempty"`
-	CompanyId uint32 `protobuf:"varint,7,opt,name=company_id,json=companyId,proto3" json:"company_id,omitempty"`
-	CreatorId uint32 `protobuf:"varint,8,opt,name=creator_id,json=creatorId,proto3" json:"creator_id,omitempty"`
-	UpdaterId uint32 `protobuf:"varint,9,opt,name=updater_id,json=updaterId,proto3" json:"updater_id,omitempty"`
-	CreatedAt string `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt string `protobuf:"bytes,11,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	Id        uint32   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name      string   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Replicas  uint32   `protobuf:"varint,3,opt,name=replicas,proto3" json:"replicas,omitempty"`
+	PlanId    []uint32 `protobuf:"varint,4,rep,packed,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`
+	State     string   `protobuf:"bytes,5,opt,name=state,proto3" json:"state,omitempty"`
+	StateId   uint32   `protobuf:"varint,6,opt,name=state_id,json=stateId,proto3" json:"state_id,omitempty"`
+	CompanyId uint32   `protobuf:"varint,7,opt,name=company_id,json=companyId,proto3" json:"company_id,omitempty"`
+	CreatorId uint32   `protobuf:"varint,8,opt,name=creator_id,json=creatorId,proto3" json:"creator_id,omitempty"`
+	UpdaterId uint32   `protobuf:"varint,9,opt,name=updater_id,json=updaterId,proto3" json:"updater_id,omitempty"`
+	CreatedAt string   `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt string   `protobuf:"bytes,11,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 }
 
 func (x *Application) Reset() {
@@ -91,11 +91,11 @@ func (x *Application) GetReplicas() uint32 {
 	return 0
 }
 
-func (x *Application) GetPlanId() uint32 {
+func (x *Application) GetPlanId() []uint32 {
 	if x != nil {
 		return x.PlanId
 	}
-	return 0
+	return nil
 }
 
 func (x *Application) GetState() string {
@@ -957,7 +957,7 @@ var file_api_application_v1_application_proto_rawDesc = []byte{
 	0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x70, 0x6c, 0x69,
 	0x63, 0x61, 0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x08, 0x72, 0x65, 0x70, 0x6c, 0x69,
 	0x63, 0x61, 0x73, 0x12, 0x17, 0x0a, 0x07, 0x70, 0x6c, 0x61, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x04,
-	0x20, 0x01, 0x28, 0x0d, 0x52, 0x06, 0x70, 0x6c, 0x61, 0x6e, 0x49, 0x64, 0x12, 0x14, 0x0a, 0x05,
+	0x20, 0x03, 0x28, 0x0d, 0x52, 0x06, 0x70, 0x6c, 0x61, 0x6e, 0x49, 0x64, 0x12, 0x14, 0x0a, 0x05,
 	0x73, 0x74, 0x61, 0x74, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x73, 0x74, 0x61,
 	0x74, 0x65, 0x12, 0x19, 0x0a, 0x08, 0x73, 0x74, 0x61, 0x74, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x06,
 	0x20, 0x01, 0x28, 0x0d, 0x52, 0x07, 0x73, 0x74, 0x61, 0x74, 0x65, 0x49, 0x64, 0x12, 0x1d, 0x0a,
