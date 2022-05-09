@@ -26,10 +26,10 @@ type StorageServiceClient interface {
 	DeleteStorage(ctx context.Context, in *DeleteStorageRequest, opts ...grpc.CallOption) (*DeleteStorageResponse, error)
 	UpdateStorage(ctx context.Context, in *UpdateStorageSizeRequest, opts ...grpc.CallOption) (*UpdateStorageSizeResponse, error)
 	FindStorage(ctx context.Context, in *FindStorageRequest, opts ...grpc.CallOption) (*FindStorageResponse, error)
-	ListStorage(ctx context.Context, in *ListStorageRequest, opts ...grpc.CallOption) (*ListStorageResponse, error)
 	GetStorage(ctx context.Context, in *GetStorageRequest, opts ...grpc.CallOption) (*GetStorageResponse, error)
 	GetStorageState(ctx context.Context, in *GetStorageStateRequest, opts ...grpc.CallOption) (*GetStorageStateResponse, error)
 	GetStorageMedium(ctx context.Context, in *GetStorageMediumRequest, opts ...grpc.CallOption) (*GetStorageMediumResponse, error)
+	UpdateStorageState(ctx context.Context, in *UpdateStorageStateRequest, opts ...grpc.CallOption) (*UpdateStorageStateResponse, error)
 }
 
 type storageServiceClient struct {
@@ -76,15 +76,6 @@ func (c *storageServiceClient) FindStorage(ctx context.Context, in *FindStorageR
 	return out, nil
 }
 
-func (c *storageServiceClient) ListStorage(ctx context.Context, in *ListStorageRequest, opts ...grpc.CallOption) (*ListStorageResponse, error) {
-	out := new(ListStorageResponse)
-	err := c.cc.Invoke(ctx, "/api.storage.v1.StorageService/ListStorage", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *storageServiceClient) GetStorage(ctx context.Context, in *GetStorageRequest, opts ...grpc.CallOption) (*GetStorageResponse, error) {
 	out := new(GetStorageResponse)
 	err := c.cc.Invoke(ctx, "/api.storage.v1.StorageService/GetStorage", in, out, opts...)
@@ -112,6 +103,15 @@ func (c *storageServiceClient) GetStorageMedium(ctx context.Context, in *GetStor
 	return out, nil
 }
 
+func (c *storageServiceClient) UpdateStorageState(ctx context.Context, in *UpdateStorageStateRequest, opts ...grpc.CallOption) (*UpdateStorageStateResponse, error) {
+	out := new(UpdateStorageStateResponse)
+	err := c.cc.Invoke(ctx, "/api.storage.v1.StorageService/UpdateStorageState", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // StorageServiceServer is the server API for StorageService service.
 // All implementations must embed UnimplementedStorageServiceServer
 // for forward compatibility
@@ -120,10 +120,10 @@ type StorageServiceServer interface {
 	DeleteStorage(context.Context, *DeleteStorageRequest) (*DeleteStorageResponse, error)
 	UpdateStorage(context.Context, *UpdateStorageSizeRequest) (*UpdateStorageSizeResponse, error)
 	FindStorage(context.Context, *FindStorageRequest) (*FindStorageResponse, error)
-	ListStorage(context.Context, *ListStorageRequest) (*ListStorageResponse, error)
 	GetStorage(context.Context, *GetStorageRequest) (*GetStorageResponse, error)
 	GetStorageState(context.Context, *GetStorageStateRequest) (*GetStorageStateResponse, error)
 	GetStorageMedium(context.Context, *GetStorageMediumRequest) (*GetStorageMediumResponse, error)
+	UpdateStorageState(context.Context, *UpdateStorageStateRequest) (*UpdateStorageStateResponse, error)
 	mustEmbedUnimplementedStorageServiceServer()
 }
 
@@ -143,9 +143,6 @@ func (UnimplementedStorageServiceServer) UpdateStorage(context.Context, *UpdateS
 func (UnimplementedStorageServiceServer) FindStorage(context.Context, *FindStorageRequest) (*FindStorageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindStorage not implemented")
 }
-func (UnimplementedStorageServiceServer) ListStorage(context.Context, *ListStorageRequest) (*ListStorageResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListStorage not implemented")
-}
 func (UnimplementedStorageServiceServer) GetStorage(context.Context, *GetStorageRequest) (*GetStorageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetStorage not implemented")
 }
@@ -154,6 +151,9 @@ func (UnimplementedStorageServiceServer) GetStorageState(context.Context, *GetSt
 }
 func (UnimplementedStorageServiceServer) GetStorageMedium(context.Context, *GetStorageMediumRequest) (*GetStorageMediumResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetStorageMedium not implemented")
+}
+func (UnimplementedStorageServiceServer) UpdateStorageState(context.Context, *UpdateStorageStateRequest) (*UpdateStorageStateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateStorageState not implemented")
 }
 func (UnimplementedStorageServiceServer) mustEmbedUnimplementedStorageServiceServer() {}
 
@@ -240,24 +240,6 @@ func _StorageService_FindStorage_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
-func _StorageService_ListStorage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListStorageRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StorageServiceServer).ListStorage(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/api.storage.v1.StorageService/ListStorage",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StorageServiceServer).ListStorage(ctx, req.(*ListStorageRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _StorageService_GetStorage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetStorageRequest)
 	if err := dec(in); err != nil {
@@ -312,6 +294,24 @@ func _StorageService_GetStorageMedium_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _StorageService_UpdateStorageState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateStorageStateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StorageServiceServer).UpdateStorageState(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.storage.v1.StorageService/UpdateStorageState",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StorageServiceServer).UpdateStorageState(ctx, req.(*UpdateStorageStateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // StorageService_ServiceDesc is the grpc.ServiceDesc for StorageService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -336,10 +336,6 @@ var StorageService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _StorageService_FindStorage_Handler,
 		},
 		{
-			MethodName: "ListStorage",
-			Handler:    _StorageService_ListStorage_Handler,
-		},
-		{
 			MethodName: "GetStorage",
 			Handler:    _StorageService_GetStorage_Handler,
 		},
@@ -350,6 +346,10 @@ var StorageService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetStorageMedium",
 			Handler:    _StorageService_GetStorageMedium_Handler,
+		},
+		{
+			MethodName: "UpdateStorageState",
+			Handler:    _StorageService_UpdateStorageState_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
