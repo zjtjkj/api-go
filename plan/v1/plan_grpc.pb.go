@@ -29,6 +29,7 @@ type PlanServiceClient interface {
 	FindPlan(ctx context.Context, in *FindPlanRequest, opts ...grpc.CallOption) (*FindPlanResponse, error)
 	GetPlan(ctx context.Context, in *GetPlanRequest, opts ...grpc.CallOption) (*GetPlanResponse, error)
 	GetInitData(ctx context.Context, in *GetInitDataRequest, opts ...grpc.CallOption) (*GetInitDataResponse, error)
+	FindPlanByCompany(ctx context.Context, in *FindPlanByCompanyRequest, opts ...grpc.CallOption) (*FindPlanByCompanyResponse, error)
 }
 
 type planServiceClient struct {
@@ -102,6 +103,15 @@ func (c *planServiceClient) GetInitData(ctx context.Context, in *GetInitDataRequ
 	return out, nil
 }
 
+func (c *planServiceClient) FindPlanByCompany(ctx context.Context, in *FindPlanByCompanyRequest, opts ...grpc.CallOption) (*FindPlanByCompanyResponse, error) {
+	out := new(FindPlanByCompanyResponse)
+	err := c.cc.Invoke(ctx, "/plan.PlanService/FindPlanByCompany", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PlanServiceServer is the server API for PlanService service.
 // All implementations must embed UnimplementedPlanServiceServer
 // for forward compatibility
@@ -113,6 +123,7 @@ type PlanServiceServer interface {
 	FindPlan(context.Context, *FindPlanRequest) (*FindPlanResponse, error)
 	GetPlan(context.Context, *GetPlanRequest) (*GetPlanResponse, error)
 	GetInitData(context.Context, *GetInitDataRequest) (*GetInitDataResponse, error)
+	FindPlanByCompany(context.Context, *FindPlanByCompanyRequest) (*FindPlanByCompanyResponse, error)
 	mustEmbedUnimplementedPlanServiceServer()
 }
 
@@ -140,6 +151,9 @@ func (UnimplementedPlanServiceServer) GetPlan(context.Context, *GetPlanRequest) 
 }
 func (UnimplementedPlanServiceServer) GetInitData(context.Context, *GetInitDataRequest) (*GetInitDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetInitData not implemented")
+}
+func (UnimplementedPlanServiceServer) FindPlanByCompany(context.Context, *FindPlanByCompanyRequest) (*FindPlanByCompanyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindPlanByCompany not implemented")
 }
 func (UnimplementedPlanServiceServer) mustEmbedUnimplementedPlanServiceServer() {}
 
@@ -280,6 +294,24 @@ func _PlanService_GetInitData_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PlanService_FindPlanByCompany_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindPlanByCompanyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PlanServiceServer).FindPlanByCompany(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/plan.PlanService/FindPlanByCompany",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PlanServiceServer).FindPlanByCompany(ctx, req.(*FindPlanByCompanyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PlanService_ServiceDesc is the grpc.ServiceDesc for PlanService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -314,6 +346,10 @@ var PlanService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetInitData",
 			Handler:    _PlanService_GetInitData_Handler,
+		},
+		{
+			MethodName: "FindPlanByCompany",
+			Handler:    _PlanService_FindPlanByCompany_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
