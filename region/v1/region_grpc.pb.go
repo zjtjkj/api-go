@@ -29,6 +29,7 @@ type RegionServiceClient interface {
 	GetRegion(ctx context.Context, in *GetRegionRequest, opts ...grpc.CallOption) (*GetRegionResponse, error)
 	GetListRegion(ctx context.Context, in *GetListRegionRequest, opts ...grpc.CallOption) (*GetListRegionResponse, error)
 	GetAncestor(ctx context.Context, in *GetAncestorRequest, opts ...grpc.CallOption) (*GetAncestorResponse, error)
+	ListAllRegion(ctx context.Context, in *ListAllRegionRequest, opts ...grpc.CallOption) (*ListAllRegionResponse, error)
 }
 
 type regionServiceClient struct {
@@ -102,6 +103,15 @@ func (c *regionServiceClient) GetAncestor(ctx context.Context, in *GetAncestorRe
 	return out, nil
 }
 
+func (c *regionServiceClient) ListAllRegion(ctx context.Context, in *ListAllRegionRequest, opts ...grpc.CallOption) (*ListAllRegionResponse, error) {
+	out := new(ListAllRegionResponse)
+	err := c.cc.Invoke(ctx, "/region.RegionService/ListAllRegion", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // RegionServiceServer is the server API for RegionService service.
 // All implementations must embed UnimplementedRegionServiceServer
 // for forward compatibility
@@ -113,6 +123,7 @@ type RegionServiceServer interface {
 	GetRegion(context.Context, *GetRegionRequest) (*GetRegionResponse, error)
 	GetListRegion(context.Context, *GetListRegionRequest) (*GetListRegionResponse, error)
 	GetAncestor(context.Context, *GetAncestorRequest) (*GetAncestorResponse, error)
+	ListAllRegion(context.Context, *ListAllRegionRequest) (*ListAllRegionResponse, error)
 	mustEmbedUnimplementedRegionServiceServer()
 }
 
@@ -140,6 +151,9 @@ func (UnimplementedRegionServiceServer) GetListRegion(context.Context, *GetListR
 }
 func (UnimplementedRegionServiceServer) GetAncestor(context.Context, *GetAncestorRequest) (*GetAncestorResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAncestor not implemented")
+}
+func (UnimplementedRegionServiceServer) ListAllRegion(context.Context, *ListAllRegionRequest) (*ListAllRegionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListAllRegion not implemented")
 }
 func (UnimplementedRegionServiceServer) mustEmbedUnimplementedRegionServiceServer() {}
 
@@ -280,6 +294,24 @@ func _RegionService_GetAncestor_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _RegionService_ListAllRegion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListAllRegionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RegionServiceServer).ListAllRegion(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/region.RegionService/ListAllRegion",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RegionServiceServer).ListAllRegion(ctx, req.(*ListAllRegionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // RegionService_ServiceDesc is the grpc.ServiceDesc for RegionService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -314,6 +346,10 @@ var RegionService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAncestor",
 			Handler:    _RegionService_GetAncestor_Handler,
+		},
+		{
+			MethodName: "ListAllRegion",
+			Handler:    _RegionService_ListAllRegion_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
