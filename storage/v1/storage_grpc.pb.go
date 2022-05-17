@@ -36,8 +36,6 @@ type StorageServiceClient interface {
 	FindAllocation(ctx context.Context, in *FindAllocationRequest, opts ...grpc.CallOption) (*FindAllocationResponse, error)
 	GetAllocation(ctx context.Context, in *GetAllocationRequest, opts ...grpc.CallOption) (*GetAllocationResponse, error)
 	ListAllocation(ctx context.Context, in *ListAllocationRequest, opts ...grpc.CallOption) (*ListAllocationResponse, error)
-	RequestSpace(ctx context.Context, in *RequestSpaceRequest, opts ...grpc.CallOption) (*RequestSpaceResponse, error)
-	ReleaseSpace(ctx context.Context, in *ReleaseSpaceRequest, opts ...grpc.CallOption) (*ReleaseSpaceResponse, error)
 }
 
 type storageServiceClient struct {
@@ -174,24 +172,6 @@ func (c *storageServiceClient) ListAllocation(ctx context.Context, in *ListAlloc
 	return out, nil
 }
 
-func (c *storageServiceClient) RequestSpace(ctx context.Context, in *RequestSpaceRequest, opts ...grpc.CallOption) (*RequestSpaceResponse, error) {
-	out := new(RequestSpaceResponse)
-	err := c.cc.Invoke(ctx, "/api.storage.v1.StorageService/RequestSpace", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *storageServiceClient) ReleaseSpace(ctx context.Context, in *ReleaseSpaceRequest, opts ...grpc.CallOption) (*ReleaseSpaceResponse, error) {
-	out := new(ReleaseSpaceResponse)
-	err := c.cc.Invoke(ctx, "/api.storage.v1.StorageService/ReleaseSpace", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // StorageServiceServer is the server API for StorageService service.
 // All implementations must embed UnimplementedStorageServiceServer
 // for forward compatibility
@@ -210,8 +190,6 @@ type StorageServiceServer interface {
 	FindAllocation(context.Context, *FindAllocationRequest) (*FindAllocationResponse, error)
 	GetAllocation(context.Context, *GetAllocationRequest) (*GetAllocationResponse, error)
 	ListAllocation(context.Context, *ListAllocationRequest) (*ListAllocationResponse, error)
-	RequestSpace(context.Context, *RequestSpaceRequest) (*RequestSpaceResponse, error)
-	ReleaseSpace(context.Context, *ReleaseSpaceRequest) (*ReleaseSpaceResponse, error)
 	mustEmbedUnimplementedStorageServiceServer()
 }
 
@@ -260,12 +238,6 @@ func (UnimplementedStorageServiceServer) GetAllocation(context.Context, *GetAllo
 }
 func (UnimplementedStorageServiceServer) ListAllocation(context.Context, *ListAllocationRequest) (*ListAllocationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListAllocation not implemented")
-}
-func (UnimplementedStorageServiceServer) RequestSpace(context.Context, *RequestSpaceRequest) (*RequestSpaceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RequestSpace not implemented")
-}
-func (UnimplementedStorageServiceServer) ReleaseSpace(context.Context, *ReleaseSpaceRequest) (*ReleaseSpaceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ReleaseSpace not implemented")
 }
 func (UnimplementedStorageServiceServer) mustEmbedUnimplementedStorageServiceServer() {}
 
@@ -532,42 +504,6 @@ func _StorageService_ListAllocation_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _StorageService_RequestSpace_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RequestSpaceRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StorageServiceServer).RequestSpace(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/api.storage.v1.StorageService/RequestSpace",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StorageServiceServer).RequestSpace(ctx, req.(*RequestSpaceRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _StorageService_ReleaseSpace_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ReleaseSpaceRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StorageServiceServer).ReleaseSpace(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/api.storage.v1.StorageService/ReleaseSpace",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StorageServiceServer).ReleaseSpace(ctx, req.(*ReleaseSpaceRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // StorageService_ServiceDesc is the grpc.ServiceDesc for StorageService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -630,14 +566,6 @@ var StorageService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListAllocation",
 			Handler:    _StorageService_ListAllocation_Handler,
-		},
-		{
-			MethodName: "RequestSpace",
-			Handler:    _StorageService_RequestSpace_Handler,
-		},
-		{
-			MethodName: "ReleaseSpace",
-			Handler:    _StorageService_ReleaseSpace_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
