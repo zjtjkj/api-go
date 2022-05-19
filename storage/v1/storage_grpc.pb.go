@@ -36,6 +36,8 @@ type StorageServiceClient interface {
 	FindAllocation(ctx context.Context, in *FindAllocationRequest, opts ...grpc.CallOption) (*FindAllocationResponse, error)
 	GetAllocation(ctx context.Context, in *GetAllocationRequest, opts ...grpc.CallOption) (*GetAllocationResponse, error)
 	ListAllocation(ctx context.Context, in *ListAllocationRequest, opts ...grpc.CallOption) (*ListAllocationResponse, error)
+	UpdateStorageStateConfirm(ctx context.Context, in *UpdateStorageStateRequest, opts ...grpc.CallOption) (*UpdateStorageStateResponse, error)
+	UpdateStorageStateCancel(ctx context.Context, in *UpdateStorageStateRequest, opts ...grpc.CallOption) (*UpdateStorageStateResponse, error)
 }
 
 type storageServiceClient struct {
@@ -48,7 +50,7 @@ func NewStorageServiceClient(cc grpc.ClientConnInterface) StorageServiceClient {
 
 func (c *storageServiceClient) CreateStorage(ctx context.Context, in *CreateStorageRequest, opts ...grpc.CallOption) (*CreateStorageResponse, error) {
 	out := new(CreateStorageResponse)
-	err := c.cc.Invoke(ctx, "/api.storage.v1.StorageService/CreateStorage", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/storage.StorageService/CreateStorage", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +59,7 @@ func (c *storageServiceClient) CreateStorage(ctx context.Context, in *CreateStor
 
 func (c *storageServiceClient) DeleteStorage(ctx context.Context, in *DeleteStorageRequest, opts ...grpc.CallOption) (*DeleteStorageResponse, error) {
 	out := new(DeleteStorageResponse)
-	err := c.cc.Invoke(ctx, "/api.storage.v1.StorageService/DeleteStorage", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/storage.StorageService/DeleteStorage", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +68,7 @@ func (c *storageServiceClient) DeleteStorage(ctx context.Context, in *DeleteStor
 
 func (c *storageServiceClient) UpdateStorage(ctx context.Context, in *UpdateStorageSizeRequest, opts ...grpc.CallOption) (*UpdateStorageSizeResponse, error) {
 	out := new(UpdateStorageSizeResponse)
-	err := c.cc.Invoke(ctx, "/api.storage.v1.StorageService/UpdateStorage", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/storage.StorageService/UpdateStorage", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +77,7 @@ func (c *storageServiceClient) UpdateStorage(ctx context.Context, in *UpdateStor
 
 func (c *storageServiceClient) FindStorage(ctx context.Context, in *FindStorageRequest, opts ...grpc.CallOption) (*FindStorageResponse, error) {
 	out := new(FindStorageResponse)
-	err := c.cc.Invoke(ctx, "/api.storage.v1.StorageService/FindStorage", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/storage.StorageService/FindStorage", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +86,7 @@ func (c *storageServiceClient) FindStorage(ctx context.Context, in *FindStorageR
 
 func (c *storageServiceClient) GetStorage(ctx context.Context, in *GetStorageRequest, opts ...grpc.CallOption) (*GetStorageResponse, error) {
 	out := new(GetStorageResponse)
-	err := c.cc.Invoke(ctx, "/api.storage.v1.StorageService/GetStorage", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/storage.StorageService/GetStorage", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -93,7 +95,7 @@ func (c *storageServiceClient) GetStorage(ctx context.Context, in *GetStorageReq
 
 func (c *storageServiceClient) GetStorageState(ctx context.Context, in *GetStorageStateRequest, opts ...grpc.CallOption) (*GetStorageStateResponse, error) {
 	out := new(GetStorageStateResponse)
-	err := c.cc.Invoke(ctx, "/api.storage.v1.StorageService/GetStorageState", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/storage.StorageService/GetStorageState", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +104,7 @@ func (c *storageServiceClient) GetStorageState(ctx context.Context, in *GetStora
 
 func (c *storageServiceClient) GetStorageMedium(ctx context.Context, in *GetStorageMediumRequest, opts ...grpc.CallOption) (*GetStorageMediumResponse, error) {
 	out := new(GetStorageMediumResponse)
-	err := c.cc.Invoke(ctx, "/api.storage.v1.StorageService/GetStorageMedium", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/storage.StorageService/GetStorageMedium", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +113,7 @@ func (c *storageServiceClient) GetStorageMedium(ctx context.Context, in *GetStor
 
 func (c *storageServiceClient) UpdateStorageState(ctx context.Context, in *UpdateStorageStateRequest, opts ...grpc.CallOption) (*UpdateStorageStateResponse, error) {
 	out := new(UpdateStorageStateResponse)
-	err := c.cc.Invoke(ctx, "/api.storage.v1.StorageService/UpdateStorageState", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/storage.StorageService/UpdateStorageState", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -120,7 +122,7 @@ func (c *storageServiceClient) UpdateStorageState(ctx context.Context, in *Updat
 
 func (c *storageServiceClient) CreateAllocation(ctx context.Context, in *CreateAllocationRequest, opts ...grpc.CallOption) (*CreateAllocationResponse, error) {
 	out := new(CreateAllocationResponse)
-	err := c.cc.Invoke(ctx, "/api.storage.v1.StorageService/CreateAllocation", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/storage.StorageService/CreateAllocation", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -129,7 +131,7 @@ func (c *storageServiceClient) CreateAllocation(ctx context.Context, in *CreateA
 
 func (c *storageServiceClient) DeleteAllocation(ctx context.Context, in *DeleteAllocationRequest, opts ...grpc.CallOption) (*DeleteAllocationResponse, error) {
 	out := new(DeleteAllocationResponse)
-	err := c.cc.Invoke(ctx, "/api.storage.v1.StorageService/DeleteAllocation", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/storage.StorageService/DeleteAllocation", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -138,7 +140,7 @@ func (c *storageServiceClient) DeleteAllocation(ctx context.Context, in *DeleteA
 
 func (c *storageServiceClient) UpdateAllocation(ctx context.Context, in *UpdateAllocationRequest, opts ...grpc.CallOption) (*UpdateAllocationResponse, error) {
 	out := new(UpdateAllocationResponse)
-	err := c.cc.Invoke(ctx, "/api.storage.v1.StorageService/UpdateAllocation", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/storage.StorageService/UpdateAllocation", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -147,7 +149,7 @@ func (c *storageServiceClient) UpdateAllocation(ctx context.Context, in *UpdateA
 
 func (c *storageServiceClient) FindAllocation(ctx context.Context, in *FindAllocationRequest, opts ...grpc.CallOption) (*FindAllocationResponse, error) {
 	out := new(FindAllocationResponse)
-	err := c.cc.Invoke(ctx, "/api.storage.v1.StorageService/FindAllocation", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/storage.StorageService/FindAllocation", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -156,7 +158,7 @@ func (c *storageServiceClient) FindAllocation(ctx context.Context, in *FindAlloc
 
 func (c *storageServiceClient) GetAllocation(ctx context.Context, in *GetAllocationRequest, opts ...grpc.CallOption) (*GetAllocationResponse, error) {
 	out := new(GetAllocationResponse)
-	err := c.cc.Invoke(ctx, "/api.storage.v1.StorageService/GetAllocation", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/storage.StorageService/GetAllocation", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -165,7 +167,25 @@ func (c *storageServiceClient) GetAllocation(ctx context.Context, in *GetAllocat
 
 func (c *storageServiceClient) ListAllocation(ctx context.Context, in *ListAllocationRequest, opts ...grpc.CallOption) (*ListAllocationResponse, error) {
 	out := new(ListAllocationResponse)
-	err := c.cc.Invoke(ctx, "/api.storage.v1.StorageService/ListAllocation", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/storage.StorageService/ListAllocation", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *storageServiceClient) UpdateStorageStateConfirm(ctx context.Context, in *UpdateStorageStateRequest, opts ...grpc.CallOption) (*UpdateStorageStateResponse, error) {
+	out := new(UpdateStorageStateResponse)
+	err := c.cc.Invoke(ctx, "/storage.StorageService/UpdateStorageStateConfirm", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *storageServiceClient) UpdateStorageStateCancel(ctx context.Context, in *UpdateStorageStateRequest, opts ...grpc.CallOption) (*UpdateStorageStateResponse, error) {
+	out := new(UpdateStorageStateResponse)
+	err := c.cc.Invoke(ctx, "/storage.StorageService/UpdateStorageStateCancel", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -190,6 +210,8 @@ type StorageServiceServer interface {
 	FindAllocation(context.Context, *FindAllocationRequest) (*FindAllocationResponse, error)
 	GetAllocation(context.Context, *GetAllocationRequest) (*GetAllocationResponse, error)
 	ListAllocation(context.Context, *ListAllocationRequest) (*ListAllocationResponse, error)
+	UpdateStorageStateConfirm(context.Context, *UpdateStorageStateRequest) (*UpdateStorageStateResponse, error)
+	UpdateStorageStateCancel(context.Context, *UpdateStorageStateRequest) (*UpdateStorageStateResponse, error)
 	mustEmbedUnimplementedStorageServiceServer()
 }
 
@@ -239,6 +261,12 @@ func (UnimplementedStorageServiceServer) GetAllocation(context.Context, *GetAllo
 func (UnimplementedStorageServiceServer) ListAllocation(context.Context, *ListAllocationRequest) (*ListAllocationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListAllocation not implemented")
 }
+func (UnimplementedStorageServiceServer) UpdateStorageStateConfirm(context.Context, *UpdateStorageStateRequest) (*UpdateStorageStateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateStorageStateConfirm not implemented")
+}
+func (UnimplementedStorageServiceServer) UpdateStorageStateCancel(context.Context, *UpdateStorageStateRequest) (*UpdateStorageStateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateStorageStateCancel not implemented")
+}
 func (UnimplementedStorageServiceServer) mustEmbedUnimplementedStorageServiceServer() {}
 
 // UnsafeStorageServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -262,7 +290,7 @@ func _StorageService_CreateStorage_Handler(srv interface{}, ctx context.Context,
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.storage.v1.StorageService/CreateStorage",
+		FullMethod: "/storage.StorageService/CreateStorage",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(StorageServiceServer).CreateStorage(ctx, req.(*CreateStorageRequest))
@@ -280,7 +308,7 @@ func _StorageService_DeleteStorage_Handler(srv interface{}, ctx context.Context,
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.storage.v1.StorageService/DeleteStorage",
+		FullMethod: "/storage.StorageService/DeleteStorage",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(StorageServiceServer).DeleteStorage(ctx, req.(*DeleteStorageRequest))
@@ -298,7 +326,7 @@ func _StorageService_UpdateStorage_Handler(srv interface{}, ctx context.Context,
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.storage.v1.StorageService/UpdateStorage",
+		FullMethod: "/storage.StorageService/UpdateStorage",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(StorageServiceServer).UpdateStorage(ctx, req.(*UpdateStorageSizeRequest))
@@ -316,7 +344,7 @@ func _StorageService_FindStorage_Handler(srv interface{}, ctx context.Context, d
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.storage.v1.StorageService/FindStorage",
+		FullMethod: "/storage.StorageService/FindStorage",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(StorageServiceServer).FindStorage(ctx, req.(*FindStorageRequest))
@@ -334,7 +362,7 @@ func _StorageService_GetStorage_Handler(srv interface{}, ctx context.Context, de
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.storage.v1.StorageService/GetStorage",
+		FullMethod: "/storage.StorageService/GetStorage",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(StorageServiceServer).GetStorage(ctx, req.(*GetStorageRequest))
@@ -352,7 +380,7 @@ func _StorageService_GetStorageState_Handler(srv interface{}, ctx context.Contex
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.storage.v1.StorageService/GetStorageState",
+		FullMethod: "/storage.StorageService/GetStorageState",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(StorageServiceServer).GetStorageState(ctx, req.(*GetStorageStateRequest))
@@ -370,7 +398,7 @@ func _StorageService_GetStorageMedium_Handler(srv interface{}, ctx context.Conte
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.storage.v1.StorageService/GetStorageMedium",
+		FullMethod: "/storage.StorageService/GetStorageMedium",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(StorageServiceServer).GetStorageMedium(ctx, req.(*GetStorageMediumRequest))
@@ -388,7 +416,7 @@ func _StorageService_UpdateStorageState_Handler(srv interface{}, ctx context.Con
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.storage.v1.StorageService/UpdateStorageState",
+		FullMethod: "/storage.StorageService/UpdateStorageState",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(StorageServiceServer).UpdateStorageState(ctx, req.(*UpdateStorageStateRequest))
@@ -406,7 +434,7 @@ func _StorageService_CreateAllocation_Handler(srv interface{}, ctx context.Conte
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.storage.v1.StorageService/CreateAllocation",
+		FullMethod: "/storage.StorageService/CreateAllocation",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(StorageServiceServer).CreateAllocation(ctx, req.(*CreateAllocationRequest))
@@ -424,7 +452,7 @@ func _StorageService_DeleteAllocation_Handler(srv interface{}, ctx context.Conte
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.storage.v1.StorageService/DeleteAllocation",
+		FullMethod: "/storage.StorageService/DeleteAllocation",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(StorageServiceServer).DeleteAllocation(ctx, req.(*DeleteAllocationRequest))
@@ -442,7 +470,7 @@ func _StorageService_UpdateAllocation_Handler(srv interface{}, ctx context.Conte
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.storage.v1.StorageService/UpdateAllocation",
+		FullMethod: "/storage.StorageService/UpdateAllocation",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(StorageServiceServer).UpdateAllocation(ctx, req.(*UpdateAllocationRequest))
@@ -460,7 +488,7 @@ func _StorageService_FindAllocation_Handler(srv interface{}, ctx context.Context
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.storage.v1.StorageService/FindAllocation",
+		FullMethod: "/storage.StorageService/FindAllocation",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(StorageServiceServer).FindAllocation(ctx, req.(*FindAllocationRequest))
@@ -478,7 +506,7 @@ func _StorageService_GetAllocation_Handler(srv interface{}, ctx context.Context,
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.storage.v1.StorageService/GetAllocation",
+		FullMethod: "/storage.StorageService/GetAllocation",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(StorageServiceServer).GetAllocation(ctx, req.(*GetAllocationRequest))
@@ -496,10 +524,46 @@ func _StorageService_ListAllocation_Handler(srv interface{}, ctx context.Context
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.storage.v1.StorageService/ListAllocation",
+		FullMethod: "/storage.StorageService/ListAllocation",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(StorageServiceServer).ListAllocation(ctx, req.(*ListAllocationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _StorageService_UpdateStorageStateConfirm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateStorageStateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StorageServiceServer).UpdateStorageStateConfirm(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/storage.StorageService/UpdateStorageStateConfirm",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StorageServiceServer).UpdateStorageStateConfirm(ctx, req.(*UpdateStorageStateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _StorageService_UpdateStorageStateCancel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateStorageStateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StorageServiceServer).UpdateStorageStateCancel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/storage.StorageService/UpdateStorageStateCancel",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StorageServiceServer).UpdateStorageStateCancel(ctx, req.(*UpdateStorageStateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -508,7 +572,7 @@ func _StorageService_ListAllocation_Handler(srv interface{}, ctx context.Context
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var StorageService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.storage.v1.StorageService",
+	ServiceName: "storage.StorageService",
 	HandlerType: (*StorageServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -566,6 +630,14 @@ var StorageService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListAllocation",
 			Handler:    _StorageService_ListAllocation_Handler,
+		},
+		{
+			MethodName: "UpdateStorageStateConfirm",
+			Handler:    _StorageService_UpdateStorageStateConfirm_Handler,
+		},
+		{
+			MethodName: "UpdateStorageStateCancel",
+			Handler:    _StorageService_UpdateStorageStateCancel_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
