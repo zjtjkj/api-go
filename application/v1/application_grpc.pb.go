@@ -29,6 +29,12 @@ type ApplicationServiceClient interface {
 	GetApp(ctx context.Context, in *GetAppRequest, opts ...grpc.CallOption) (*GetAppResponse, error)
 	ListStates(ctx context.Context, in *ListStatesRequest, opts ...grpc.CallOption) (*ListStatesResponse, error)
 	UpdateAppState(ctx context.Context, in *UpdateAppStateRequest, opts ...grpc.CallOption) (*UpdateAppStateResponse, error)
+	CreateAppConfirm(ctx context.Context, in *CreateAppRequest, opts ...grpc.CallOption) (*CreateAppResponse, error)
+	DeleteAppConfirm(ctx context.Context, in *DeleteAppRequest, opts ...grpc.CallOption) (*DeleteAppResponse, error)
+	UpdateAppConfirm(ctx context.Context, in *UpdateAppRequest, opts ...grpc.CallOption) (*UpdateAppResponse, error)
+	CreateAppCancel(ctx context.Context, in *CreateAppRequest, opts ...grpc.CallOption) (*CreateAppResponse, error)
+	DeleteAppCancel(ctx context.Context, in *DeleteAppRequest, opts ...grpc.CallOption) (*DeleteAppResponse, error)
+	UpdateAppCancel(ctx context.Context, in *UpdateAppRequest, opts ...grpc.CallOption) (*UpdateAppResponse, error)
 }
 
 type applicationServiceClient struct {
@@ -102,6 +108,60 @@ func (c *applicationServiceClient) UpdateAppState(ctx context.Context, in *Updat
 	return out, nil
 }
 
+func (c *applicationServiceClient) CreateAppConfirm(ctx context.Context, in *CreateAppRequest, opts ...grpc.CallOption) (*CreateAppResponse, error) {
+	out := new(CreateAppResponse)
+	err := c.cc.Invoke(ctx, "/application.ApplicationService/CreateAppConfirm", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *applicationServiceClient) DeleteAppConfirm(ctx context.Context, in *DeleteAppRequest, opts ...grpc.CallOption) (*DeleteAppResponse, error) {
+	out := new(DeleteAppResponse)
+	err := c.cc.Invoke(ctx, "/application.ApplicationService/DeleteAppConfirm", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *applicationServiceClient) UpdateAppConfirm(ctx context.Context, in *UpdateAppRequest, opts ...grpc.CallOption) (*UpdateAppResponse, error) {
+	out := new(UpdateAppResponse)
+	err := c.cc.Invoke(ctx, "/application.ApplicationService/UpdateAppConfirm", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *applicationServiceClient) CreateAppCancel(ctx context.Context, in *CreateAppRequest, opts ...grpc.CallOption) (*CreateAppResponse, error) {
+	out := new(CreateAppResponse)
+	err := c.cc.Invoke(ctx, "/application.ApplicationService/CreateAppCancel", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *applicationServiceClient) DeleteAppCancel(ctx context.Context, in *DeleteAppRequest, opts ...grpc.CallOption) (*DeleteAppResponse, error) {
+	out := new(DeleteAppResponse)
+	err := c.cc.Invoke(ctx, "/application.ApplicationService/DeleteAppCancel", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *applicationServiceClient) UpdateAppCancel(ctx context.Context, in *UpdateAppRequest, opts ...grpc.CallOption) (*UpdateAppResponse, error) {
+	out := new(UpdateAppResponse)
+	err := c.cc.Invoke(ctx, "/application.ApplicationService/UpdateAppCancel", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ApplicationServiceServer is the server API for ApplicationService service.
 // All implementations must embed UnimplementedApplicationServiceServer
 // for forward compatibility
@@ -113,6 +173,12 @@ type ApplicationServiceServer interface {
 	GetApp(context.Context, *GetAppRequest) (*GetAppResponse, error)
 	ListStates(context.Context, *ListStatesRequest) (*ListStatesResponse, error)
 	UpdateAppState(context.Context, *UpdateAppStateRequest) (*UpdateAppStateResponse, error)
+	CreateAppConfirm(context.Context, *CreateAppRequest) (*CreateAppResponse, error)
+	DeleteAppConfirm(context.Context, *DeleteAppRequest) (*DeleteAppResponse, error)
+	UpdateAppConfirm(context.Context, *UpdateAppRequest) (*UpdateAppResponse, error)
+	CreateAppCancel(context.Context, *CreateAppRequest) (*CreateAppResponse, error)
+	DeleteAppCancel(context.Context, *DeleteAppRequest) (*DeleteAppResponse, error)
+	UpdateAppCancel(context.Context, *UpdateAppRequest) (*UpdateAppResponse, error)
 	mustEmbedUnimplementedApplicationServiceServer()
 }
 
@@ -140,6 +206,24 @@ func (UnimplementedApplicationServiceServer) ListStates(context.Context, *ListSt
 }
 func (UnimplementedApplicationServiceServer) UpdateAppState(context.Context, *UpdateAppStateRequest) (*UpdateAppStateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateAppState not implemented")
+}
+func (UnimplementedApplicationServiceServer) CreateAppConfirm(context.Context, *CreateAppRequest) (*CreateAppResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateAppConfirm not implemented")
+}
+func (UnimplementedApplicationServiceServer) DeleteAppConfirm(context.Context, *DeleteAppRequest) (*DeleteAppResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteAppConfirm not implemented")
+}
+func (UnimplementedApplicationServiceServer) UpdateAppConfirm(context.Context, *UpdateAppRequest) (*UpdateAppResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateAppConfirm not implemented")
+}
+func (UnimplementedApplicationServiceServer) CreateAppCancel(context.Context, *CreateAppRequest) (*CreateAppResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateAppCancel not implemented")
+}
+func (UnimplementedApplicationServiceServer) DeleteAppCancel(context.Context, *DeleteAppRequest) (*DeleteAppResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteAppCancel not implemented")
+}
+func (UnimplementedApplicationServiceServer) UpdateAppCancel(context.Context, *UpdateAppRequest) (*UpdateAppResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateAppCancel not implemented")
 }
 func (UnimplementedApplicationServiceServer) mustEmbedUnimplementedApplicationServiceServer() {}
 
@@ -280,6 +364,114 @@ func _ApplicationService_UpdateAppState_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApplicationService_CreateAppConfirm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateAppRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationServiceServer).CreateAppConfirm(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.ApplicationService/CreateAppConfirm",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationServiceServer).CreateAppConfirm(ctx, req.(*CreateAppRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApplicationService_DeleteAppConfirm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteAppRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationServiceServer).DeleteAppConfirm(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.ApplicationService/DeleteAppConfirm",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationServiceServer).DeleteAppConfirm(ctx, req.(*DeleteAppRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApplicationService_UpdateAppConfirm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateAppRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationServiceServer).UpdateAppConfirm(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.ApplicationService/UpdateAppConfirm",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationServiceServer).UpdateAppConfirm(ctx, req.(*UpdateAppRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApplicationService_CreateAppCancel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateAppRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationServiceServer).CreateAppCancel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.ApplicationService/CreateAppCancel",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationServiceServer).CreateAppCancel(ctx, req.(*CreateAppRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApplicationService_DeleteAppCancel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteAppRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationServiceServer).DeleteAppCancel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.ApplicationService/DeleteAppCancel",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationServiceServer).DeleteAppCancel(ctx, req.(*DeleteAppRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApplicationService_UpdateAppCancel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateAppRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationServiceServer).UpdateAppCancel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.ApplicationService/UpdateAppCancel",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationServiceServer).UpdateAppCancel(ctx, req.(*UpdateAppRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ApplicationService_ServiceDesc is the grpc.ServiceDesc for ApplicationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -314,6 +506,30 @@ var ApplicationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateAppState",
 			Handler:    _ApplicationService_UpdateAppState_Handler,
+		},
+		{
+			MethodName: "CreateAppConfirm",
+			Handler:    _ApplicationService_CreateAppConfirm_Handler,
+		},
+		{
+			MethodName: "DeleteAppConfirm",
+			Handler:    _ApplicationService_DeleteAppConfirm_Handler,
+		},
+		{
+			MethodName: "UpdateAppConfirm",
+			Handler:    _ApplicationService_UpdateAppConfirm_Handler,
+		},
+		{
+			MethodName: "CreateAppCancel",
+			Handler:    _ApplicationService_CreateAppCancel_Handler,
+		},
+		{
+			MethodName: "DeleteAppCancel",
+			Handler:    _ApplicationService_DeleteAppCancel_Handler,
+		},
+		{
+			MethodName: "UpdateAppCancel",
+			Handler:    _ApplicationService_UpdateAppCancel_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
