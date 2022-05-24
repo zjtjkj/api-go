@@ -29,6 +29,7 @@ type ApplicationServiceClient interface {
 	GetApp(ctx context.Context, in *GetAppRequest, opts ...grpc.CallOption) (*GetAppResponse, error)
 	ListStates(ctx context.Context, in *ListStatesRequest, opts ...grpc.CallOption) (*ListStatesResponse, error)
 	UpdateAppState(ctx context.Context, in *UpdateAppStateRequest, opts ...grpc.CallOption) (*UpdateAppStateResponse, error)
+	ListApp(ctx context.Context, in *ListAppRequest, opts ...grpc.CallOption) (*ListAppResponse, error)
 	CreateAppConfirm(ctx context.Context, in *CreateAppRequest, opts ...grpc.CallOption) (*CreateAppResponse, error)
 	DeleteAppConfirm(ctx context.Context, in *DeleteAppRequest, opts ...grpc.CallOption) (*DeleteAppResponse, error)
 	UpdateAppConfirm(ctx context.Context, in *UpdateAppRequest, opts ...grpc.CallOption) (*UpdateAppResponse, error)
@@ -108,6 +109,15 @@ func (c *applicationServiceClient) UpdateAppState(ctx context.Context, in *Updat
 	return out, nil
 }
 
+func (c *applicationServiceClient) ListApp(ctx context.Context, in *ListAppRequest, opts ...grpc.CallOption) (*ListAppResponse, error) {
+	out := new(ListAppResponse)
+	err := c.cc.Invoke(ctx, "/application.ApplicationService/ListApp", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *applicationServiceClient) CreateAppConfirm(ctx context.Context, in *CreateAppRequest, opts ...grpc.CallOption) (*CreateAppResponse, error) {
 	out := new(CreateAppResponse)
 	err := c.cc.Invoke(ctx, "/application.ApplicationService/CreateAppConfirm", in, out, opts...)
@@ -173,6 +183,7 @@ type ApplicationServiceServer interface {
 	GetApp(context.Context, *GetAppRequest) (*GetAppResponse, error)
 	ListStates(context.Context, *ListStatesRequest) (*ListStatesResponse, error)
 	UpdateAppState(context.Context, *UpdateAppStateRequest) (*UpdateAppStateResponse, error)
+	ListApp(context.Context, *ListAppRequest) (*ListAppResponse, error)
 	CreateAppConfirm(context.Context, *CreateAppRequest) (*CreateAppResponse, error)
 	DeleteAppConfirm(context.Context, *DeleteAppRequest) (*DeleteAppResponse, error)
 	UpdateAppConfirm(context.Context, *UpdateAppRequest) (*UpdateAppResponse, error)
@@ -206,6 +217,9 @@ func (UnimplementedApplicationServiceServer) ListStates(context.Context, *ListSt
 }
 func (UnimplementedApplicationServiceServer) UpdateAppState(context.Context, *UpdateAppStateRequest) (*UpdateAppStateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateAppState not implemented")
+}
+func (UnimplementedApplicationServiceServer) ListApp(context.Context, *ListAppRequest) (*ListAppResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListApp not implemented")
 }
 func (UnimplementedApplicationServiceServer) CreateAppConfirm(context.Context, *CreateAppRequest) (*CreateAppResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateAppConfirm not implemented")
@@ -364,6 +378,24 @@ func _ApplicationService_UpdateAppState_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApplicationService_ListApp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListAppRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationServiceServer).ListApp(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.ApplicationService/ListApp",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationServiceServer).ListApp(ctx, req.(*ListAppRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ApplicationService_CreateAppConfirm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateAppRequest)
 	if err := dec(in); err != nil {
@@ -506,6 +538,10 @@ var ApplicationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateAppState",
 			Handler:    _ApplicationService_UpdateAppState_Handler,
+		},
+		{
+			MethodName: "ListApp",
+			Handler:    _ApplicationService_ListApp_Handler,
 		},
 		{
 			MethodName: "CreateAppConfirm",
