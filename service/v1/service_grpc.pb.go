@@ -27,6 +27,10 @@ type K8SServiceServiceClient interface {
 	UpdateService(ctx context.Context, in *UpdateServiceRequest, opts ...grpc.CallOption) (*UpdateServiceResponse, error)
 	GetService(ctx context.Context, in *GetServiceRequest, opts ...grpc.CallOption) (*GetServiceResponse, error)
 	ListService(ctx context.Context, in *ListServiceRequest, opts ...grpc.CallOption) (*ListServiceResponse, error)
+	CreateServiceConfirm(ctx context.Context, in *CreateServiceRequest, opts ...grpc.CallOption) (*CreateServiceResponse, error)
+	DeleteServiceConfirm(ctx context.Context, in *DeleteServiceRequest, opts ...grpc.CallOption) (*DeleteServiceResponse, error)
+	CreateServiceCancel(ctx context.Context, in *CreateServiceRequest, opts ...grpc.CallOption) (*CreateServiceResponse, error)
+	DeleteServiceCancel(ctx context.Context, in *DeleteServiceRequest, opts ...grpc.CallOption) (*DeleteServiceResponse, error)
 }
 
 type k8SServiceServiceClient struct {
@@ -82,6 +86,42 @@ func (c *k8SServiceServiceClient) ListService(ctx context.Context, in *ListServi
 	return out, nil
 }
 
+func (c *k8SServiceServiceClient) CreateServiceConfirm(ctx context.Context, in *CreateServiceRequest, opts ...grpc.CallOption) (*CreateServiceResponse, error) {
+	out := new(CreateServiceResponse)
+	err := c.cc.Invoke(ctx, "/service.K8sServiceService/CreateServiceConfirm", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *k8SServiceServiceClient) DeleteServiceConfirm(ctx context.Context, in *DeleteServiceRequest, opts ...grpc.CallOption) (*DeleteServiceResponse, error) {
+	out := new(DeleteServiceResponse)
+	err := c.cc.Invoke(ctx, "/service.K8sServiceService/DeleteServiceConfirm", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *k8SServiceServiceClient) CreateServiceCancel(ctx context.Context, in *CreateServiceRequest, opts ...grpc.CallOption) (*CreateServiceResponse, error) {
+	out := new(CreateServiceResponse)
+	err := c.cc.Invoke(ctx, "/service.K8sServiceService/CreateServiceCancel", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *k8SServiceServiceClient) DeleteServiceCancel(ctx context.Context, in *DeleteServiceRequest, opts ...grpc.CallOption) (*DeleteServiceResponse, error) {
+	out := new(DeleteServiceResponse)
+	err := c.cc.Invoke(ctx, "/service.K8sServiceService/DeleteServiceCancel", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // K8SServiceServiceServer is the server API for K8SServiceService service.
 // All implementations must embed UnimplementedK8SServiceServiceServer
 // for forward compatibility
@@ -91,6 +131,10 @@ type K8SServiceServiceServer interface {
 	UpdateService(context.Context, *UpdateServiceRequest) (*UpdateServiceResponse, error)
 	GetService(context.Context, *GetServiceRequest) (*GetServiceResponse, error)
 	ListService(context.Context, *ListServiceRequest) (*ListServiceResponse, error)
+	CreateServiceConfirm(context.Context, *CreateServiceRequest) (*CreateServiceResponse, error)
+	DeleteServiceConfirm(context.Context, *DeleteServiceRequest) (*DeleteServiceResponse, error)
+	CreateServiceCancel(context.Context, *CreateServiceRequest) (*CreateServiceResponse, error)
+	DeleteServiceCancel(context.Context, *DeleteServiceRequest) (*DeleteServiceResponse, error)
 	mustEmbedUnimplementedK8SServiceServiceServer()
 }
 
@@ -112,6 +156,18 @@ func (UnimplementedK8SServiceServiceServer) GetService(context.Context, *GetServ
 }
 func (UnimplementedK8SServiceServiceServer) ListService(context.Context, *ListServiceRequest) (*ListServiceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListService not implemented")
+}
+func (UnimplementedK8SServiceServiceServer) CreateServiceConfirm(context.Context, *CreateServiceRequest) (*CreateServiceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateServiceConfirm not implemented")
+}
+func (UnimplementedK8SServiceServiceServer) DeleteServiceConfirm(context.Context, *DeleteServiceRequest) (*DeleteServiceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteServiceConfirm not implemented")
+}
+func (UnimplementedK8SServiceServiceServer) CreateServiceCancel(context.Context, *CreateServiceRequest) (*CreateServiceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateServiceCancel not implemented")
+}
+func (UnimplementedK8SServiceServiceServer) DeleteServiceCancel(context.Context, *DeleteServiceRequest) (*DeleteServiceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteServiceCancel not implemented")
 }
 func (UnimplementedK8SServiceServiceServer) mustEmbedUnimplementedK8SServiceServiceServer() {}
 
@@ -216,6 +272,78 @@ func _K8SServiceService_ListService_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _K8SServiceService_CreateServiceConfirm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateServiceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(K8SServiceServiceServer).CreateServiceConfirm(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/service.K8sServiceService/CreateServiceConfirm",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(K8SServiceServiceServer).CreateServiceConfirm(ctx, req.(*CreateServiceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _K8SServiceService_DeleteServiceConfirm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteServiceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(K8SServiceServiceServer).DeleteServiceConfirm(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/service.K8sServiceService/DeleteServiceConfirm",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(K8SServiceServiceServer).DeleteServiceConfirm(ctx, req.(*DeleteServiceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _K8SServiceService_CreateServiceCancel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateServiceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(K8SServiceServiceServer).CreateServiceCancel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/service.K8sServiceService/CreateServiceCancel",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(K8SServiceServiceServer).CreateServiceCancel(ctx, req.(*CreateServiceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _K8SServiceService_DeleteServiceCancel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteServiceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(K8SServiceServiceServer).DeleteServiceCancel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/service.K8sServiceService/DeleteServiceCancel",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(K8SServiceServiceServer).DeleteServiceCancel(ctx, req.(*DeleteServiceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // K8SServiceService_ServiceDesc is the grpc.ServiceDesc for K8SServiceService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -242,6 +370,22 @@ var K8SServiceService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListService",
 			Handler:    _K8SServiceService_ListService_Handler,
+		},
+		{
+			MethodName: "CreateServiceConfirm",
+			Handler:    _K8SServiceService_CreateServiceConfirm_Handler,
+		},
+		{
+			MethodName: "DeleteServiceConfirm",
+			Handler:    _K8SServiceService_DeleteServiceConfirm_Handler,
+		},
+		{
+			MethodName: "CreateServiceCancel",
+			Handler:    _K8SServiceService_CreateServiceCancel_Handler,
+		},
+		{
+			MethodName: "DeleteServiceCancel",
+			Handler:    _K8SServiceService_DeleteServiceCancel_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
