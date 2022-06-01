@@ -27,6 +27,7 @@ type K8SServiceServiceClient interface {
 	UpdateService(ctx context.Context, in *UpdateServiceRequest, opts ...grpc.CallOption) (*UpdateServiceResponse, error)
 	GetService(ctx context.Context, in *GetServiceRequest, opts ...grpc.CallOption) (*GetServiceResponse, error)
 	ListService(ctx context.Context, in *ListServiceRequest, opts ...grpc.CallOption) (*ListServiceResponse, error)
+	FindService(ctx context.Context, in *FindServiceRequest, opts ...grpc.CallOption) (*FindServiceResponse, error)
 	CreateServiceConfirm(ctx context.Context, in *CreateServiceRequest, opts ...grpc.CallOption) (*CreateServiceResponse, error)
 	DeleteServiceConfirm(ctx context.Context, in *DeleteServiceRequest, opts ...grpc.CallOption) (*DeleteServiceResponse, error)
 	CreateServiceCancel(ctx context.Context, in *CreateServiceRequest, opts ...grpc.CallOption) (*CreateServiceResponse, error)
@@ -86,6 +87,15 @@ func (c *k8SServiceServiceClient) ListService(ctx context.Context, in *ListServi
 	return out, nil
 }
 
+func (c *k8SServiceServiceClient) FindService(ctx context.Context, in *FindServiceRequest, opts ...grpc.CallOption) (*FindServiceResponse, error) {
+	out := new(FindServiceResponse)
+	err := c.cc.Invoke(ctx, "/service.K8sServiceService/FindService", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *k8SServiceServiceClient) CreateServiceConfirm(ctx context.Context, in *CreateServiceRequest, opts ...grpc.CallOption) (*CreateServiceResponse, error) {
 	out := new(CreateServiceResponse)
 	err := c.cc.Invoke(ctx, "/service.K8sServiceService/CreateServiceConfirm", in, out, opts...)
@@ -131,6 +141,7 @@ type K8SServiceServiceServer interface {
 	UpdateService(context.Context, *UpdateServiceRequest) (*UpdateServiceResponse, error)
 	GetService(context.Context, *GetServiceRequest) (*GetServiceResponse, error)
 	ListService(context.Context, *ListServiceRequest) (*ListServiceResponse, error)
+	FindService(context.Context, *FindServiceRequest) (*FindServiceResponse, error)
 	CreateServiceConfirm(context.Context, *CreateServiceRequest) (*CreateServiceResponse, error)
 	DeleteServiceConfirm(context.Context, *DeleteServiceRequest) (*DeleteServiceResponse, error)
 	CreateServiceCancel(context.Context, *CreateServiceRequest) (*CreateServiceResponse, error)
@@ -156,6 +167,9 @@ func (UnimplementedK8SServiceServiceServer) GetService(context.Context, *GetServ
 }
 func (UnimplementedK8SServiceServiceServer) ListService(context.Context, *ListServiceRequest) (*ListServiceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListService not implemented")
+}
+func (UnimplementedK8SServiceServiceServer) FindService(context.Context, *FindServiceRequest) (*FindServiceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindService not implemented")
 }
 func (UnimplementedK8SServiceServiceServer) CreateServiceConfirm(context.Context, *CreateServiceRequest) (*CreateServiceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateServiceConfirm not implemented")
@@ -272,6 +286,24 @@ func _K8SServiceService_ListService_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _K8SServiceService_FindService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindServiceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(K8SServiceServiceServer).FindService(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/service.K8sServiceService/FindService",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(K8SServiceServiceServer).FindService(ctx, req.(*FindServiceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _K8SServiceService_CreateServiceConfirm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateServiceRequest)
 	if err := dec(in); err != nil {
@@ -370,6 +402,10 @@ var K8SServiceService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListService",
 			Handler:    _K8SServiceService_ListService_Handler,
+		},
+		{
+			MethodName: "FindService",
+			Handler:    _K8SServiceService_FindService_Handler,
 		},
 		{
 			MethodName: "CreateServiceConfirm",
