@@ -24,7 +24,11 @@ const _ = grpc.SupportPackageIsVersion7
 type AlgoClient interface {
 	SetAuth(ctx context.Context, in *SetAuthRequest, opts ...grpc.CallOption) (*SetAuthResponse, error)
 	GetInfo(ctx context.Context, in *GetInfoRequest, opts ...grpc.CallOption) (*GetInfoResponse, error)
+	GetStatus(ctx context.Context, in *GetStatusRequest, opts ...grpc.CallOption) (*GetStatusResponse, error)
 	CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*CreateTaskResponse, error)
+	ListTask(ctx context.Context, in *ListTaskRequest, opts ...grpc.CallOption) (*ListTaskResponse, error)
+	DeleteTask(ctx context.Context, in *DeleteTaskRequest, opts ...grpc.CallOption) (*DeleteTaskResponse, error)
+	GetTask(ctx context.Context, in *GetTaskRequest, opts ...grpc.CallOption) (*GetTaskResponse, error)
 }
 
 type algoClient struct {
@@ -53,9 +57,45 @@ func (c *algoClient) GetInfo(ctx context.Context, in *GetInfoRequest, opts ...gr
 	return out, nil
 }
 
+func (c *algoClient) GetStatus(ctx context.Context, in *GetStatusRequest, opts ...grpc.CallOption) (*GetStatusResponse, error) {
+	out := new(GetStatusResponse)
+	err := c.cc.Invoke(ctx, "/api.algo.v1.Algo/GetStatus", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *algoClient) CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*CreateTaskResponse, error) {
 	out := new(CreateTaskResponse)
 	err := c.cc.Invoke(ctx, "/api.algo.v1.Algo/CreateTask", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *algoClient) ListTask(ctx context.Context, in *ListTaskRequest, opts ...grpc.CallOption) (*ListTaskResponse, error) {
+	out := new(ListTaskResponse)
+	err := c.cc.Invoke(ctx, "/api.algo.v1.Algo/ListTask", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *algoClient) DeleteTask(ctx context.Context, in *DeleteTaskRequest, opts ...grpc.CallOption) (*DeleteTaskResponse, error) {
+	out := new(DeleteTaskResponse)
+	err := c.cc.Invoke(ctx, "/api.algo.v1.Algo/DeleteTask", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *algoClient) GetTask(ctx context.Context, in *GetTaskRequest, opts ...grpc.CallOption) (*GetTaskResponse, error) {
+	out := new(GetTaskResponse)
+	err := c.cc.Invoke(ctx, "/api.algo.v1.Algo/GetTask", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +108,11 @@ func (c *algoClient) CreateTask(ctx context.Context, in *CreateTaskRequest, opts
 type AlgoServer interface {
 	SetAuth(context.Context, *SetAuthRequest) (*SetAuthResponse, error)
 	GetInfo(context.Context, *GetInfoRequest) (*GetInfoResponse, error)
+	GetStatus(context.Context, *GetStatusRequest) (*GetStatusResponse, error)
 	CreateTask(context.Context, *CreateTaskRequest) (*CreateTaskResponse, error)
+	ListTask(context.Context, *ListTaskRequest) (*ListTaskResponse, error)
+	DeleteTask(context.Context, *DeleteTaskRequest) (*DeleteTaskResponse, error)
+	GetTask(context.Context, *GetTaskRequest) (*GetTaskResponse, error)
 	mustEmbedUnimplementedAlgoServer()
 }
 
@@ -82,8 +126,20 @@ func (UnimplementedAlgoServer) SetAuth(context.Context, *SetAuthRequest) (*SetAu
 func (UnimplementedAlgoServer) GetInfo(context.Context, *GetInfoRequest) (*GetInfoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetInfo not implemented")
 }
+func (UnimplementedAlgoServer) GetStatus(context.Context, *GetStatusRequest) (*GetStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetStatus not implemented")
+}
 func (UnimplementedAlgoServer) CreateTask(context.Context, *CreateTaskRequest) (*CreateTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTask not implemented")
+}
+func (UnimplementedAlgoServer) ListTask(context.Context, *ListTaskRequest) (*ListTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListTask not implemented")
+}
+func (UnimplementedAlgoServer) DeleteTask(context.Context, *DeleteTaskRequest) (*DeleteTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteTask not implemented")
+}
+func (UnimplementedAlgoServer) GetTask(context.Context, *GetTaskRequest) (*GetTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTask not implemented")
 }
 func (UnimplementedAlgoServer) mustEmbedUnimplementedAlgoServer() {}
 
@@ -134,6 +190,24 @@ func _Algo_GetInfo_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Algo_GetStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetStatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AlgoServer).GetStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.algo.v1.Algo/GetStatus",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AlgoServer).GetStatus(ctx, req.(*GetStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Algo_CreateTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateTaskRequest)
 	if err := dec(in); err != nil {
@@ -148,6 +222,60 @@ func _Algo_CreateTask_Handler(srv interface{}, ctx context.Context, dec func(int
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AlgoServer).CreateTask(ctx, req.(*CreateTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Algo_ListTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AlgoServer).ListTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.algo.v1.Algo/ListTask",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AlgoServer).ListTask(ctx, req.(*ListTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Algo_DeleteTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AlgoServer).DeleteTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.algo.v1.Algo/DeleteTask",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AlgoServer).DeleteTask(ctx, req.(*DeleteTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Algo_GetTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AlgoServer).GetTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.algo.v1.Algo/GetTask",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AlgoServer).GetTask(ctx, req.(*GetTaskRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -168,8 +296,24 @@ var Algo_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Algo_GetInfo_Handler,
 		},
 		{
+			MethodName: "GetStatus",
+			Handler:    _Algo_GetStatus_Handler,
+		},
+		{
 			MethodName: "CreateTask",
 			Handler:    _Algo_CreateTask_Handler,
+		},
+		{
+			MethodName: "ListTask",
+			Handler:    _Algo_ListTask_Handler,
+		},
+		{
+			MethodName: "DeleteTask",
+			Handler:    _Algo_DeleteTask_Handler,
+		},
+		{
+			MethodName: "GetTask",
+			Handler:    _Algo_GetTask_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
