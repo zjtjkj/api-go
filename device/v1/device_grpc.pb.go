@@ -27,6 +27,7 @@ type DeviceServiceClient interface {
 	SetDevice(ctx context.Context, in *SetDeviceRequest, opts ...grpc.CallOption) (*SetDeviceResponse, error)
 	FindDevice(ctx context.Context, in *FindDeviceRequest, opts ...grpc.CallOption) (*FindDeviceResponse, error)
 	GetDeviceInfo(ctx context.Context, in *GetDeviceInfoRequest, opts ...grpc.CallOption) (*GetDeviceInfoResponse, error)
+	BatchDeleteDevice(ctx context.Context, in *BatchDeleteDeviceRequest, opts ...grpc.CallOption) (*BatchDeleteDeviceResponse, error)
 }
 
 type deviceServiceClient struct {
@@ -82,6 +83,15 @@ func (c *deviceServiceClient) GetDeviceInfo(ctx context.Context, in *GetDeviceIn
 	return out, nil
 }
 
+func (c *deviceServiceClient) BatchDeleteDevice(ctx context.Context, in *BatchDeleteDeviceRequest, opts ...grpc.CallOption) (*BatchDeleteDeviceResponse, error) {
+	out := new(BatchDeleteDeviceResponse)
+	err := c.cc.Invoke(ctx, "/device.DeviceService/BatchDeleteDevice", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DeviceServiceServer is the server API for DeviceService service.
 // All implementations must embed UnimplementedDeviceServiceServer
 // for forward compatibility
@@ -91,6 +101,7 @@ type DeviceServiceServer interface {
 	SetDevice(context.Context, *SetDeviceRequest) (*SetDeviceResponse, error)
 	FindDevice(context.Context, *FindDeviceRequest) (*FindDeviceResponse, error)
 	GetDeviceInfo(context.Context, *GetDeviceInfoRequest) (*GetDeviceInfoResponse, error)
+	BatchDeleteDevice(context.Context, *BatchDeleteDeviceRequest) (*BatchDeleteDeviceResponse, error)
 	mustEmbedUnimplementedDeviceServiceServer()
 }
 
@@ -112,6 +123,9 @@ func (UnimplementedDeviceServiceServer) FindDevice(context.Context, *FindDeviceR
 }
 func (UnimplementedDeviceServiceServer) GetDeviceInfo(context.Context, *GetDeviceInfoRequest) (*GetDeviceInfoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetDeviceInfo not implemented")
+}
+func (UnimplementedDeviceServiceServer) BatchDeleteDevice(context.Context, *BatchDeleteDeviceRequest) (*BatchDeleteDeviceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BatchDeleteDevice not implemented")
 }
 func (UnimplementedDeviceServiceServer) mustEmbedUnimplementedDeviceServiceServer() {}
 
@@ -216,6 +230,24 @@ func _DeviceService_GetDeviceInfo_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DeviceService_BatchDeleteDevice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BatchDeleteDeviceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeviceServiceServer).BatchDeleteDevice(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/device.DeviceService/BatchDeleteDevice",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeviceServiceServer).BatchDeleteDevice(ctx, req.(*BatchDeleteDeviceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // DeviceService_ServiceDesc is the grpc.ServiceDesc for DeviceService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -242,6 +274,10 @@ var DeviceService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetDeviceInfo",
 			Handler:    _DeviceService_GetDeviceInfo_Handler,
+		},
+		{
+			MethodName: "BatchDeleteDevice",
+			Handler:    _DeviceService_BatchDeleteDevice_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
