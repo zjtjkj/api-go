@@ -22,12 +22,12 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DataServiceClient interface {
-	AddData(ctx context.Context, in *AddDataRequest, opts ...grpc.CallOption) (*AddDataResponse, error)
+	CreateData(ctx context.Context, in *CreateDataRequest, opts ...grpc.CallOption) (*CreateDataResponse, error)
 	DeleteData(ctx context.Context, in *DeleteDataRequest, opts ...grpc.CallOption) (*DeleteDataResponse, error)
 	UpdateData(ctx context.Context, in *UpdateDataRequest, opts ...grpc.CallOption) (*UpdateDataResponse, error)
+	SelectData(ctx context.Context, in *SelectDataRequest, opts ...grpc.CallOption) (*SelectDataResponse, error)
+	BatchDelete(ctx context.Context, in *BatchDeleteRequest, opts ...grpc.CallOption) (*BatchDeleteResponse, error)
 	FindData(ctx context.Context, in *FindDataRequest, opts ...grpc.CallOption) (*FindDataResponse, error)
-	BatchDeleteData(ctx context.Context, in *BatchDeleteDataRequest, opts ...grpc.CallOption) (*BatchDeleteDataResponse, error)
-	GetData(ctx context.Context, in *GetDataRequest, opts ...grpc.CallOption) (*GetDataResponse, error)
 }
 
 type dataServiceClient struct {
@@ -38,9 +38,9 @@ func NewDataServiceClient(cc grpc.ClientConnInterface) DataServiceClient {
 	return &dataServiceClient{cc}
 }
 
-func (c *dataServiceClient) AddData(ctx context.Context, in *AddDataRequest, opts ...grpc.CallOption) (*AddDataResponse, error) {
-	out := new(AddDataResponse)
-	err := c.cc.Invoke(ctx, "/data.DataService/AddData", in, out, opts...)
+func (c *dataServiceClient) CreateData(ctx context.Context, in *CreateDataRequest, opts ...grpc.CallOption) (*CreateDataResponse, error) {
+	out := new(CreateDataResponse)
+	err := c.cc.Invoke(ctx, "/data.DataService/CreateData", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -65,27 +65,27 @@ func (c *dataServiceClient) UpdateData(ctx context.Context, in *UpdateDataReques
 	return out, nil
 }
 
+func (c *dataServiceClient) SelectData(ctx context.Context, in *SelectDataRequest, opts ...grpc.CallOption) (*SelectDataResponse, error) {
+	out := new(SelectDataResponse)
+	err := c.cc.Invoke(ctx, "/data.DataService/SelectData", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dataServiceClient) BatchDelete(ctx context.Context, in *BatchDeleteRequest, opts ...grpc.CallOption) (*BatchDeleteResponse, error) {
+	out := new(BatchDeleteResponse)
+	err := c.cc.Invoke(ctx, "/data.DataService/BatchDelete", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *dataServiceClient) FindData(ctx context.Context, in *FindDataRequest, opts ...grpc.CallOption) (*FindDataResponse, error) {
 	out := new(FindDataResponse)
 	err := c.cc.Invoke(ctx, "/data.DataService/FindData", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *dataServiceClient) BatchDeleteData(ctx context.Context, in *BatchDeleteDataRequest, opts ...grpc.CallOption) (*BatchDeleteDataResponse, error) {
-	out := new(BatchDeleteDataResponse)
-	err := c.cc.Invoke(ctx, "/data.DataService/BatchDeleteData", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *dataServiceClient) GetData(ctx context.Context, in *GetDataRequest, opts ...grpc.CallOption) (*GetDataResponse, error) {
-	out := new(GetDataResponse)
-	err := c.cc.Invoke(ctx, "/data.DataService/GetData", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -96,12 +96,12 @@ func (c *dataServiceClient) GetData(ctx context.Context, in *GetDataRequest, opt
 // All implementations must embed UnimplementedDataServiceServer
 // for forward compatibility
 type DataServiceServer interface {
-	AddData(context.Context, *AddDataRequest) (*AddDataResponse, error)
+	CreateData(context.Context, *CreateDataRequest) (*CreateDataResponse, error)
 	DeleteData(context.Context, *DeleteDataRequest) (*DeleteDataResponse, error)
 	UpdateData(context.Context, *UpdateDataRequest) (*UpdateDataResponse, error)
+	SelectData(context.Context, *SelectDataRequest) (*SelectDataResponse, error)
+	BatchDelete(context.Context, *BatchDeleteRequest) (*BatchDeleteResponse, error)
 	FindData(context.Context, *FindDataRequest) (*FindDataResponse, error)
-	BatchDeleteData(context.Context, *BatchDeleteDataRequest) (*BatchDeleteDataResponse, error)
-	GetData(context.Context, *GetDataRequest) (*GetDataResponse, error)
 	mustEmbedUnimplementedDataServiceServer()
 }
 
@@ -109,8 +109,8 @@ type DataServiceServer interface {
 type UnimplementedDataServiceServer struct {
 }
 
-func (UnimplementedDataServiceServer) AddData(context.Context, *AddDataRequest) (*AddDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddData not implemented")
+func (UnimplementedDataServiceServer) CreateData(context.Context, *CreateDataRequest) (*CreateDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateData not implemented")
 }
 func (UnimplementedDataServiceServer) DeleteData(context.Context, *DeleteDataRequest) (*DeleteDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteData not implemented")
@@ -118,14 +118,14 @@ func (UnimplementedDataServiceServer) DeleteData(context.Context, *DeleteDataReq
 func (UnimplementedDataServiceServer) UpdateData(context.Context, *UpdateDataRequest) (*UpdateDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateData not implemented")
 }
+func (UnimplementedDataServiceServer) SelectData(context.Context, *SelectDataRequest) (*SelectDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SelectData not implemented")
+}
+func (UnimplementedDataServiceServer) BatchDelete(context.Context, *BatchDeleteRequest) (*BatchDeleteResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BatchDelete not implemented")
+}
 func (UnimplementedDataServiceServer) FindData(context.Context, *FindDataRequest) (*FindDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindData not implemented")
-}
-func (UnimplementedDataServiceServer) BatchDeleteData(context.Context, *BatchDeleteDataRequest) (*BatchDeleteDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BatchDeleteData not implemented")
-}
-func (UnimplementedDataServiceServer) GetData(context.Context, *GetDataRequest) (*GetDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetData not implemented")
 }
 func (UnimplementedDataServiceServer) mustEmbedUnimplementedDataServiceServer() {}
 
@@ -140,20 +140,20 @@ func RegisterDataServiceServer(s grpc.ServiceRegistrar, srv DataServiceServer) {
 	s.RegisterService(&DataService_ServiceDesc, srv)
 }
 
-func _DataService_AddData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddDataRequest)
+func _DataService_CreateData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateDataRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DataServiceServer).AddData(ctx, in)
+		return srv.(DataServiceServer).CreateData(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/data.DataService/AddData",
+		FullMethod: "/data.DataService/CreateData",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DataServiceServer).AddData(ctx, req.(*AddDataRequest))
+		return srv.(DataServiceServer).CreateData(ctx, req.(*CreateDataRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -194,6 +194,42 @@ func _DataService_UpdateData_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DataService_SelectData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SelectDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DataServiceServer).SelectData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/data.DataService/SelectData",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DataServiceServer).SelectData(ctx, req.(*SelectDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DataService_BatchDelete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BatchDeleteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DataServiceServer).BatchDelete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/data.DataService/BatchDelete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DataServiceServer).BatchDelete(ctx, req.(*BatchDeleteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _DataService_FindData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FindDataRequest)
 	if err := dec(in); err != nil {
@@ -212,42 +248,6 @@ func _DataService_FindData_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _DataService_BatchDeleteData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BatchDeleteDataRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(DataServiceServer).BatchDeleteData(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/data.DataService/BatchDeleteData",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DataServiceServer).BatchDeleteData(ctx, req.(*BatchDeleteDataRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _DataService_GetData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetDataRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(DataServiceServer).GetData(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/data.DataService/GetData",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DataServiceServer).GetData(ctx, req.(*GetDataRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // DataService_ServiceDesc is the grpc.ServiceDesc for DataService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -256,8 +256,8 @@ var DataService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*DataServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "AddData",
-			Handler:    _DataService_AddData_Handler,
+			MethodName: "CreateData",
+			Handler:    _DataService_CreateData_Handler,
 		},
 		{
 			MethodName: "DeleteData",
@@ -268,16 +268,16 @@ var DataService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _DataService_UpdateData_Handler,
 		},
 		{
+			MethodName: "SelectData",
+			Handler:    _DataService_SelectData_Handler,
+		},
+		{
+			MethodName: "BatchDelete",
+			Handler:    _DataService_BatchDelete_Handler,
+		},
+		{
 			MethodName: "FindData",
 			Handler:    _DataService_FindData_Handler,
-		},
-		{
-			MethodName: "BatchDeleteData",
-			Handler:    _DataService_BatchDeleteData_Handler,
-		},
-		{
-			MethodName: "GetData",
-			Handler:    _DataService_GetData_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
