@@ -22,14 +22,14 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ResourceServiceClient interface {
-	AddResource(ctx context.Context, in *AddResourceRequest, opts ...grpc.CallOption) (*AddResourceResponse, error)
+	CreateResource(ctx context.Context, in *CreateResourceRequest, opts ...grpc.CallOption) (*CreateResourceResponse, error)
 	DeleteResource(ctx context.Context, in *DeleteResourceRequest, opts ...grpc.CallOption) (*DeleteResourceResponse, error)
-	SetResource(ctx context.Context, in *SetResourceRequest, opts ...grpc.CallOption) (*SetResourceResponse, error)
-	FindResource(ctx context.Context, in *FindResourceRequest, opts ...grpc.CallOption) (*FindResourceResponse, error)
+	UpdateResource(ctx context.Context, in *UpdateResourceRequest, opts ...grpc.CallOption) (*UpdateResourceResponse, error)
+	SelectResource(ctx context.Context, in *SelectResourceRequest, opts ...grpc.CallOption) (*SelectResourceResponse, error)
 	GetResource(ctx context.Context, in *GetResourceRequest, opts ...grpc.CallOption) (*GetResourceResponse, error)
 	KindResource(ctx context.Context, in *KindResourceRequest, opts ...grpc.CallOption) (*KindResourceResponse, error)
-	GetDevice(ctx context.Context, in *GetDeviceRequest, opts ...grpc.CallOption) (*GetDeviceResponse, error)
-	GetData(ctx context.Context, in *GetDataRequest, opts ...grpc.CallOption) (*GetDataResponse, error)
+	ListDevice(ctx context.Context, in *ListDeviceRequest, opts ...grpc.CallOption) (*ListDeviceResponse, error)
+	ListData(ctx context.Context, in *ListDataRequest, opts ...grpc.CallOption) (*ListDataResponse, error)
 }
 
 type resourceServiceClient struct {
@@ -40,9 +40,9 @@ func NewResourceServiceClient(cc grpc.ClientConnInterface) ResourceServiceClient
 	return &resourceServiceClient{cc}
 }
 
-func (c *resourceServiceClient) AddResource(ctx context.Context, in *AddResourceRequest, opts ...grpc.CallOption) (*AddResourceResponse, error) {
-	out := new(AddResourceResponse)
-	err := c.cc.Invoke(ctx, "/pb.ResourceService/AddResource", in, out, opts...)
+func (c *resourceServiceClient) CreateResource(ctx context.Context, in *CreateResourceRequest, opts ...grpc.CallOption) (*CreateResourceResponse, error) {
+	out := new(CreateResourceResponse)
+	err := c.cc.Invoke(ctx, "/pb.ResourceService/CreateResource", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -58,18 +58,18 @@ func (c *resourceServiceClient) DeleteResource(ctx context.Context, in *DeleteRe
 	return out, nil
 }
 
-func (c *resourceServiceClient) SetResource(ctx context.Context, in *SetResourceRequest, opts ...grpc.CallOption) (*SetResourceResponse, error) {
-	out := new(SetResourceResponse)
-	err := c.cc.Invoke(ctx, "/pb.ResourceService/SetResource", in, out, opts...)
+func (c *resourceServiceClient) UpdateResource(ctx context.Context, in *UpdateResourceRequest, opts ...grpc.CallOption) (*UpdateResourceResponse, error) {
+	out := new(UpdateResourceResponse)
+	err := c.cc.Invoke(ctx, "/pb.ResourceService/UpdateResource", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *resourceServiceClient) FindResource(ctx context.Context, in *FindResourceRequest, opts ...grpc.CallOption) (*FindResourceResponse, error) {
-	out := new(FindResourceResponse)
-	err := c.cc.Invoke(ctx, "/pb.ResourceService/FindResource", in, out, opts...)
+func (c *resourceServiceClient) SelectResource(ctx context.Context, in *SelectResourceRequest, opts ...grpc.CallOption) (*SelectResourceResponse, error) {
+	out := new(SelectResourceResponse)
+	err := c.cc.Invoke(ctx, "/pb.ResourceService/SelectResource", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -94,18 +94,18 @@ func (c *resourceServiceClient) KindResource(ctx context.Context, in *KindResour
 	return out, nil
 }
 
-func (c *resourceServiceClient) GetDevice(ctx context.Context, in *GetDeviceRequest, opts ...grpc.CallOption) (*GetDeviceResponse, error) {
-	out := new(GetDeviceResponse)
-	err := c.cc.Invoke(ctx, "/pb.ResourceService/GetDevice", in, out, opts...)
+func (c *resourceServiceClient) ListDevice(ctx context.Context, in *ListDeviceRequest, opts ...grpc.CallOption) (*ListDeviceResponse, error) {
+	out := new(ListDeviceResponse)
+	err := c.cc.Invoke(ctx, "/pb.ResourceService/ListDevice", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *resourceServiceClient) GetData(ctx context.Context, in *GetDataRequest, opts ...grpc.CallOption) (*GetDataResponse, error) {
-	out := new(GetDataResponse)
-	err := c.cc.Invoke(ctx, "/pb.ResourceService/GetData", in, out, opts...)
+func (c *resourceServiceClient) ListData(ctx context.Context, in *ListDataRequest, opts ...grpc.CallOption) (*ListDataResponse, error) {
+	out := new(ListDataResponse)
+	err := c.cc.Invoke(ctx, "/pb.ResourceService/ListData", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -116,14 +116,14 @@ func (c *resourceServiceClient) GetData(ctx context.Context, in *GetDataRequest,
 // All implementations must embed UnimplementedResourceServiceServer
 // for forward compatibility
 type ResourceServiceServer interface {
-	AddResource(context.Context, *AddResourceRequest) (*AddResourceResponse, error)
+	CreateResource(context.Context, *CreateResourceRequest) (*CreateResourceResponse, error)
 	DeleteResource(context.Context, *DeleteResourceRequest) (*DeleteResourceResponse, error)
-	SetResource(context.Context, *SetResourceRequest) (*SetResourceResponse, error)
-	FindResource(context.Context, *FindResourceRequest) (*FindResourceResponse, error)
+	UpdateResource(context.Context, *UpdateResourceRequest) (*UpdateResourceResponse, error)
+	SelectResource(context.Context, *SelectResourceRequest) (*SelectResourceResponse, error)
 	GetResource(context.Context, *GetResourceRequest) (*GetResourceResponse, error)
 	KindResource(context.Context, *KindResourceRequest) (*KindResourceResponse, error)
-	GetDevice(context.Context, *GetDeviceRequest) (*GetDeviceResponse, error)
-	GetData(context.Context, *GetDataRequest) (*GetDataResponse, error)
+	ListDevice(context.Context, *ListDeviceRequest) (*ListDeviceResponse, error)
+	ListData(context.Context, *ListDataRequest) (*ListDataResponse, error)
 	mustEmbedUnimplementedResourceServiceServer()
 }
 
@@ -131,17 +131,17 @@ type ResourceServiceServer interface {
 type UnimplementedResourceServiceServer struct {
 }
 
-func (UnimplementedResourceServiceServer) AddResource(context.Context, *AddResourceRequest) (*AddResourceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddResource not implemented")
+func (UnimplementedResourceServiceServer) CreateResource(context.Context, *CreateResourceRequest) (*CreateResourceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateResource not implemented")
 }
 func (UnimplementedResourceServiceServer) DeleteResource(context.Context, *DeleteResourceRequest) (*DeleteResourceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteResource not implemented")
 }
-func (UnimplementedResourceServiceServer) SetResource(context.Context, *SetResourceRequest) (*SetResourceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetResource not implemented")
+func (UnimplementedResourceServiceServer) UpdateResource(context.Context, *UpdateResourceRequest) (*UpdateResourceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateResource not implemented")
 }
-func (UnimplementedResourceServiceServer) FindResource(context.Context, *FindResourceRequest) (*FindResourceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method FindResource not implemented")
+func (UnimplementedResourceServiceServer) SelectResource(context.Context, *SelectResourceRequest) (*SelectResourceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SelectResource not implemented")
 }
 func (UnimplementedResourceServiceServer) GetResource(context.Context, *GetResourceRequest) (*GetResourceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetResource not implemented")
@@ -149,11 +149,11 @@ func (UnimplementedResourceServiceServer) GetResource(context.Context, *GetResou
 func (UnimplementedResourceServiceServer) KindResource(context.Context, *KindResourceRequest) (*KindResourceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method KindResource not implemented")
 }
-func (UnimplementedResourceServiceServer) GetDevice(context.Context, *GetDeviceRequest) (*GetDeviceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetDevice not implemented")
+func (UnimplementedResourceServiceServer) ListDevice(context.Context, *ListDeviceRequest) (*ListDeviceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListDevice not implemented")
 }
-func (UnimplementedResourceServiceServer) GetData(context.Context, *GetDataRequest) (*GetDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetData not implemented")
+func (UnimplementedResourceServiceServer) ListData(context.Context, *ListDataRequest) (*ListDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListData not implemented")
 }
 func (UnimplementedResourceServiceServer) mustEmbedUnimplementedResourceServiceServer() {}
 
@@ -168,20 +168,20 @@ func RegisterResourceServiceServer(s grpc.ServiceRegistrar, srv ResourceServiceS
 	s.RegisterService(&ResourceService_ServiceDesc, srv)
 }
 
-func _ResourceService_AddResource_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddResourceRequest)
+func _ResourceService_CreateResource_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateResourceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ResourceServiceServer).AddResource(ctx, in)
+		return srv.(ResourceServiceServer).CreateResource(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pb.ResourceService/AddResource",
+		FullMethod: "/pb.ResourceService/CreateResource",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ResourceServiceServer).AddResource(ctx, req.(*AddResourceRequest))
+		return srv.(ResourceServiceServer).CreateResource(ctx, req.(*CreateResourceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -204,38 +204,38 @@ func _ResourceService_DeleteResource_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ResourceService_SetResource_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SetResourceRequest)
+func _ResourceService_UpdateResource_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateResourceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ResourceServiceServer).SetResource(ctx, in)
+		return srv.(ResourceServiceServer).UpdateResource(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pb.ResourceService/SetResource",
+		FullMethod: "/pb.ResourceService/UpdateResource",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ResourceServiceServer).SetResource(ctx, req.(*SetResourceRequest))
+		return srv.(ResourceServiceServer).UpdateResource(ctx, req.(*UpdateResourceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ResourceService_FindResource_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FindResourceRequest)
+func _ResourceService_SelectResource_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SelectResourceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ResourceServiceServer).FindResource(ctx, in)
+		return srv.(ResourceServiceServer).SelectResource(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pb.ResourceService/FindResource",
+		FullMethod: "/pb.ResourceService/SelectResource",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ResourceServiceServer).FindResource(ctx, req.(*FindResourceRequest))
+		return srv.(ResourceServiceServer).SelectResource(ctx, req.(*SelectResourceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -276,38 +276,38 @@ func _ResourceService_KindResource_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ResourceService_GetDevice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetDeviceRequest)
+func _ResourceService_ListDevice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListDeviceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ResourceServiceServer).GetDevice(ctx, in)
+		return srv.(ResourceServiceServer).ListDevice(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pb.ResourceService/GetDevice",
+		FullMethod: "/pb.ResourceService/ListDevice",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ResourceServiceServer).GetDevice(ctx, req.(*GetDeviceRequest))
+		return srv.(ResourceServiceServer).ListDevice(ctx, req.(*ListDeviceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ResourceService_GetData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetDataRequest)
+func _ResourceService_ListData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListDataRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ResourceServiceServer).GetData(ctx, in)
+		return srv.(ResourceServiceServer).ListData(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pb.ResourceService/GetData",
+		FullMethod: "/pb.ResourceService/ListData",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ResourceServiceServer).GetData(ctx, req.(*GetDataRequest))
+		return srv.(ResourceServiceServer).ListData(ctx, req.(*ListDataRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -320,20 +320,20 @@ var ResourceService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ResourceServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "AddResource",
-			Handler:    _ResourceService_AddResource_Handler,
+			MethodName: "CreateResource",
+			Handler:    _ResourceService_CreateResource_Handler,
 		},
 		{
 			MethodName: "DeleteResource",
 			Handler:    _ResourceService_DeleteResource_Handler,
 		},
 		{
-			MethodName: "SetResource",
-			Handler:    _ResourceService_SetResource_Handler,
+			MethodName: "UpdateResource",
+			Handler:    _ResourceService_UpdateResource_Handler,
 		},
 		{
-			MethodName: "FindResource",
-			Handler:    _ResourceService_FindResource_Handler,
+			MethodName: "SelectResource",
+			Handler:    _ResourceService_SelectResource_Handler,
 		},
 		{
 			MethodName: "GetResource",
@@ -344,12 +344,12 @@ var ResourceService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ResourceService_KindResource_Handler,
 		},
 		{
-			MethodName: "GetDevice",
-			Handler:    _ResourceService_GetDevice_Handler,
+			MethodName: "ListDevice",
+			Handler:    _ResourceService_ListDevice_Handler,
 		},
 		{
-			MethodName: "GetData",
-			Handler:    _ResourceService_GetData_Handler,
+			MethodName: "ListData",
+			Handler:    _ResourceService_ListData_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
