@@ -22,19 +22,19 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PlanServiceClient interface {
-	AddPlan(ctx context.Context, in *AddPlanRequest, opts ...grpc.CallOption) (*AddPlanResponse, error)
+	AddPlan(ctx context.Context, in *CreatePlanRequest, opts ...grpc.CallOption) (*CreatePlanResponse, error)
 	DeletePlan(ctx context.Context, in *DeletePlanRequest, opts ...grpc.CallOption) (*DeletePlanResponse, error)
 	UpdatePlan(ctx context.Context, in *UpdatePlanRequest, opts ...grpc.CallOption) (*UpdatePlanResponse, error)
 	ListPlan(ctx context.Context, in *ListPlanRequest, opts ...grpc.CallOption) (*ListPlanResponse, error)
-	FindPlan(ctx context.Context, in *FindPlanRequest, opts ...grpc.CallOption) (*FindPlanResponse, error)
 	GetPlan(ctx context.Context, in *GetPlanRequest, opts ...grpc.CallOption) (*GetPlanResponse, error)
+	SelectPlanByName(ctx context.Context, in *SelectPlanByNameRequest, opts ...grpc.CallOption) (*SelectPlanByNameResponse, error)
+	SelectPlanByCompany(ctx context.Context, in *SelectPlanByCompanyRequest, opts ...grpc.CallOption) (*SelectPlanByCompanyResponse, error)
+	SelectAlgoPlanById(ctx context.Context, in *SelectAlgoPlanByIdRequest, opts ...grpc.CallOption) (*SelectAlgoPlanByIdResponse, error)
 	GetInitData(ctx context.Context, in *GetInitDataRequest, opts ...grpc.CallOption) (*GetInitDataResponse, error)
-	FindPlanByCompany(ctx context.Context, in *FindPlanByCompanyRequest, opts ...grpc.CallOption) (*FindPlanByCompanyResponse, error)
 	LockPlan(ctx context.Context, in *LockAndUnlockPlanRequest, opts ...grpc.CallOption) (*LockAndUnlockPlanResponse, error)
 	UnlockPlan(ctx context.Context, in *LockAndUnlockPlanRequest, opts ...grpc.CallOption) (*LockAndUnlockPlanResponse, error)
-	ListPlanByIdAndType(ctx context.Context, in *ListPlanByIdAndTypeRequest, opts ...grpc.CallOption) (*ListPlanByIdAndTypeResponse, error)
-	AddPlanConfirm(ctx context.Context, in *AddPlanRequest, opts ...grpc.CallOption) (*AddPlanResponse, error)
-	AddPlanCancel(ctx context.Context, in *AddPlanRequest, opts ...grpc.CallOption) (*AddPlanResponse, error)
+	CreatePlanConfirm(ctx context.Context, in *CreatePlanRequest, opts ...grpc.CallOption) (*CreatePlanResponse, error)
+	CreatePlanCancel(ctx context.Context, in *CreatePlanRequest, opts ...grpc.CallOption) (*CreatePlanResponse, error)
 	DeletePlanConfirm(ctx context.Context, in *DeletePlanRequest, opts ...grpc.CallOption) (*DeletePlanResponse, error)
 	DeletePlanCancel(ctx context.Context, in *DeletePlanRequest, opts ...grpc.CallOption) (*DeletePlanResponse, error)
 	LockPlanConfirm(ctx context.Context, in *LockAndUnlockPlanRequest, opts ...grpc.CallOption) (*LockAndUnlockPlanResponse, error)
@@ -51,8 +51,8 @@ func NewPlanServiceClient(cc grpc.ClientConnInterface) PlanServiceClient {
 	return &planServiceClient{cc}
 }
 
-func (c *planServiceClient) AddPlan(ctx context.Context, in *AddPlanRequest, opts ...grpc.CallOption) (*AddPlanResponse, error) {
-	out := new(AddPlanResponse)
+func (c *planServiceClient) AddPlan(ctx context.Context, in *CreatePlanRequest, opts ...grpc.CallOption) (*CreatePlanResponse, error) {
+	out := new(CreatePlanResponse)
 	err := c.cc.Invoke(ctx, "/plan.PlanService/AddPlan", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -87,15 +87,6 @@ func (c *planServiceClient) ListPlan(ctx context.Context, in *ListPlanRequest, o
 	return out, nil
 }
 
-func (c *planServiceClient) FindPlan(ctx context.Context, in *FindPlanRequest, opts ...grpc.CallOption) (*FindPlanResponse, error) {
-	out := new(FindPlanResponse)
-	err := c.cc.Invoke(ctx, "/plan.PlanService/FindPlan", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *planServiceClient) GetPlan(ctx context.Context, in *GetPlanRequest, opts ...grpc.CallOption) (*GetPlanResponse, error) {
 	out := new(GetPlanResponse)
 	err := c.cc.Invoke(ctx, "/plan.PlanService/GetPlan", in, out, opts...)
@@ -105,18 +96,36 @@ func (c *planServiceClient) GetPlan(ctx context.Context, in *GetPlanRequest, opt
 	return out, nil
 }
 
-func (c *planServiceClient) GetInitData(ctx context.Context, in *GetInitDataRequest, opts ...grpc.CallOption) (*GetInitDataResponse, error) {
-	out := new(GetInitDataResponse)
-	err := c.cc.Invoke(ctx, "/plan.PlanService/GetInitData", in, out, opts...)
+func (c *planServiceClient) SelectPlanByName(ctx context.Context, in *SelectPlanByNameRequest, opts ...grpc.CallOption) (*SelectPlanByNameResponse, error) {
+	out := new(SelectPlanByNameResponse)
+	err := c.cc.Invoke(ctx, "/plan.PlanService/SelectPlanByName", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *planServiceClient) FindPlanByCompany(ctx context.Context, in *FindPlanByCompanyRequest, opts ...grpc.CallOption) (*FindPlanByCompanyResponse, error) {
-	out := new(FindPlanByCompanyResponse)
-	err := c.cc.Invoke(ctx, "/plan.PlanService/FindPlanByCompany", in, out, opts...)
+func (c *planServiceClient) SelectPlanByCompany(ctx context.Context, in *SelectPlanByCompanyRequest, opts ...grpc.CallOption) (*SelectPlanByCompanyResponse, error) {
+	out := new(SelectPlanByCompanyResponse)
+	err := c.cc.Invoke(ctx, "/plan.PlanService/SelectPlanByCompany", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *planServiceClient) SelectAlgoPlanById(ctx context.Context, in *SelectAlgoPlanByIdRequest, opts ...grpc.CallOption) (*SelectAlgoPlanByIdResponse, error) {
+	out := new(SelectAlgoPlanByIdResponse)
+	err := c.cc.Invoke(ctx, "/plan.PlanService/SelectAlgoPlanById", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *planServiceClient) GetInitData(ctx context.Context, in *GetInitDataRequest, opts ...grpc.CallOption) (*GetInitDataResponse, error) {
+	out := new(GetInitDataResponse)
+	err := c.cc.Invoke(ctx, "/plan.PlanService/GetInitData", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -141,27 +150,18 @@ func (c *planServiceClient) UnlockPlan(ctx context.Context, in *LockAndUnlockPla
 	return out, nil
 }
 
-func (c *planServiceClient) ListPlanByIdAndType(ctx context.Context, in *ListPlanByIdAndTypeRequest, opts ...grpc.CallOption) (*ListPlanByIdAndTypeResponse, error) {
-	out := new(ListPlanByIdAndTypeResponse)
-	err := c.cc.Invoke(ctx, "/plan.PlanService/ListPlanByIdAndType", in, out, opts...)
+func (c *planServiceClient) CreatePlanConfirm(ctx context.Context, in *CreatePlanRequest, opts ...grpc.CallOption) (*CreatePlanResponse, error) {
+	out := new(CreatePlanResponse)
+	err := c.cc.Invoke(ctx, "/plan.PlanService/CreatePlanConfirm", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *planServiceClient) AddPlanConfirm(ctx context.Context, in *AddPlanRequest, opts ...grpc.CallOption) (*AddPlanResponse, error) {
-	out := new(AddPlanResponse)
-	err := c.cc.Invoke(ctx, "/plan.PlanService/AddPlanConfirm", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *planServiceClient) AddPlanCancel(ctx context.Context, in *AddPlanRequest, opts ...grpc.CallOption) (*AddPlanResponse, error) {
-	out := new(AddPlanResponse)
-	err := c.cc.Invoke(ctx, "/plan.PlanService/AddPlanCancel", in, out, opts...)
+func (c *planServiceClient) CreatePlanCancel(ctx context.Context, in *CreatePlanRequest, opts ...grpc.CallOption) (*CreatePlanResponse, error) {
+	out := new(CreatePlanResponse)
+	err := c.cc.Invoke(ctx, "/plan.PlanService/CreatePlanCancel", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -226,19 +226,19 @@ func (c *planServiceClient) UnlockPlanCancel(ctx context.Context, in *LockAndUnl
 // All implementations must embed UnimplementedPlanServiceServer
 // for forward compatibility
 type PlanServiceServer interface {
-	AddPlan(context.Context, *AddPlanRequest) (*AddPlanResponse, error)
+	AddPlan(context.Context, *CreatePlanRequest) (*CreatePlanResponse, error)
 	DeletePlan(context.Context, *DeletePlanRequest) (*DeletePlanResponse, error)
 	UpdatePlan(context.Context, *UpdatePlanRequest) (*UpdatePlanResponse, error)
 	ListPlan(context.Context, *ListPlanRequest) (*ListPlanResponse, error)
-	FindPlan(context.Context, *FindPlanRequest) (*FindPlanResponse, error)
 	GetPlan(context.Context, *GetPlanRequest) (*GetPlanResponse, error)
+	SelectPlanByName(context.Context, *SelectPlanByNameRequest) (*SelectPlanByNameResponse, error)
+	SelectPlanByCompany(context.Context, *SelectPlanByCompanyRequest) (*SelectPlanByCompanyResponse, error)
+	SelectAlgoPlanById(context.Context, *SelectAlgoPlanByIdRequest) (*SelectAlgoPlanByIdResponse, error)
 	GetInitData(context.Context, *GetInitDataRequest) (*GetInitDataResponse, error)
-	FindPlanByCompany(context.Context, *FindPlanByCompanyRequest) (*FindPlanByCompanyResponse, error)
 	LockPlan(context.Context, *LockAndUnlockPlanRequest) (*LockAndUnlockPlanResponse, error)
 	UnlockPlan(context.Context, *LockAndUnlockPlanRequest) (*LockAndUnlockPlanResponse, error)
-	ListPlanByIdAndType(context.Context, *ListPlanByIdAndTypeRequest) (*ListPlanByIdAndTypeResponse, error)
-	AddPlanConfirm(context.Context, *AddPlanRequest) (*AddPlanResponse, error)
-	AddPlanCancel(context.Context, *AddPlanRequest) (*AddPlanResponse, error)
+	CreatePlanConfirm(context.Context, *CreatePlanRequest) (*CreatePlanResponse, error)
+	CreatePlanCancel(context.Context, *CreatePlanRequest) (*CreatePlanResponse, error)
 	DeletePlanConfirm(context.Context, *DeletePlanRequest) (*DeletePlanResponse, error)
 	DeletePlanCancel(context.Context, *DeletePlanRequest) (*DeletePlanResponse, error)
 	LockPlanConfirm(context.Context, *LockAndUnlockPlanRequest) (*LockAndUnlockPlanResponse, error)
@@ -252,7 +252,7 @@ type PlanServiceServer interface {
 type UnimplementedPlanServiceServer struct {
 }
 
-func (UnimplementedPlanServiceServer) AddPlan(context.Context, *AddPlanRequest) (*AddPlanResponse, error) {
+func (UnimplementedPlanServiceServer) AddPlan(context.Context, *CreatePlanRequest) (*CreatePlanResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddPlan not implemented")
 }
 func (UnimplementedPlanServiceServer) DeletePlan(context.Context, *DeletePlanRequest) (*DeletePlanResponse, error) {
@@ -264,17 +264,20 @@ func (UnimplementedPlanServiceServer) UpdatePlan(context.Context, *UpdatePlanReq
 func (UnimplementedPlanServiceServer) ListPlan(context.Context, *ListPlanRequest) (*ListPlanResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListPlan not implemented")
 }
-func (UnimplementedPlanServiceServer) FindPlan(context.Context, *FindPlanRequest) (*FindPlanResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method FindPlan not implemented")
-}
 func (UnimplementedPlanServiceServer) GetPlan(context.Context, *GetPlanRequest) (*GetPlanResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPlan not implemented")
 }
+func (UnimplementedPlanServiceServer) SelectPlanByName(context.Context, *SelectPlanByNameRequest) (*SelectPlanByNameResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SelectPlanByName not implemented")
+}
+func (UnimplementedPlanServiceServer) SelectPlanByCompany(context.Context, *SelectPlanByCompanyRequest) (*SelectPlanByCompanyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SelectPlanByCompany not implemented")
+}
+func (UnimplementedPlanServiceServer) SelectAlgoPlanById(context.Context, *SelectAlgoPlanByIdRequest) (*SelectAlgoPlanByIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SelectAlgoPlanById not implemented")
+}
 func (UnimplementedPlanServiceServer) GetInitData(context.Context, *GetInitDataRequest) (*GetInitDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetInitData not implemented")
-}
-func (UnimplementedPlanServiceServer) FindPlanByCompany(context.Context, *FindPlanByCompanyRequest) (*FindPlanByCompanyResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method FindPlanByCompany not implemented")
 }
 func (UnimplementedPlanServiceServer) LockPlan(context.Context, *LockAndUnlockPlanRequest) (*LockAndUnlockPlanResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LockPlan not implemented")
@@ -282,14 +285,11 @@ func (UnimplementedPlanServiceServer) LockPlan(context.Context, *LockAndUnlockPl
 func (UnimplementedPlanServiceServer) UnlockPlan(context.Context, *LockAndUnlockPlanRequest) (*LockAndUnlockPlanResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UnlockPlan not implemented")
 }
-func (UnimplementedPlanServiceServer) ListPlanByIdAndType(context.Context, *ListPlanByIdAndTypeRequest) (*ListPlanByIdAndTypeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListPlanByIdAndType not implemented")
+func (UnimplementedPlanServiceServer) CreatePlanConfirm(context.Context, *CreatePlanRequest) (*CreatePlanResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreatePlanConfirm not implemented")
 }
-func (UnimplementedPlanServiceServer) AddPlanConfirm(context.Context, *AddPlanRequest) (*AddPlanResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddPlanConfirm not implemented")
-}
-func (UnimplementedPlanServiceServer) AddPlanCancel(context.Context, *AddPlanRequest) (*AddPlanResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddPlanCancel not implemented")
+func (UnimplementedPlanServiceServer) CreatePlanCancel(context.Context, *CreatePlanRequest) (*CreatePlanResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreatePlanCancel not implemented")
 }
 func (UnimplementedPlanServiceServer) DeletePlanConfirm(context.Context, *DeletePlanRequest) (*DeletePlanResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeletePlanConfirm not implemented")
@@ -323,7 +323,7 @@ func RegisterPlanServiceServer(s grpc.ServiceRegistrar, srv PlanServiceServer) {
 }
 
 func _PlanService_AddPlan_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddPlanRequest)
+	in := new(CreatePlanRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -335,7 +335,7 @@ func _PlanService_AddPlan_Handler(srv interface{}, ctx context.Context, dec func
 		FullMethod: "/plan.PlanService/AddPlan",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PlanServiceServer).AddPlan(ctx, req.(*AddPlanRequest))
+		return srv.(PlanServiceServer).AddPlan(ctx, req.(*CreatePlanRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -394,24 +394,6 @@ func _PlanService_ListPlan_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PlanService_FindPlan_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FindPlanRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PlanServiceServer).FindPlan(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/plan.PlanService/FindPlan",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PlanServiceServer).FindPlan(ctx, req.(*FindPlanRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _PlanService_GetPlan_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetPlanRequest)
 	if err := dec(in); err != nil {
@@ -430,6 +412,60 @@ func _PlanService_GetPlan_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PlanService_SelectPlanByName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SelectPlanByNameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PlanServiceServer).SelectPlanByName(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/plan.PlanService/SelectPlanByName",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PlanServiceServer).SelectPlanByName(ctx, req.(*SelectPlanByNameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PlanService_SelectPlanByCompany_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SelectPlanByCompanyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PlanServiceServer).SelectPlanByCompany(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/plan.PlanService/SelectPlanByCompany",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PlanServiceServer).SelectPlanByCompany(ctx, req.(*SelectPlanByCompanyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PlanService_SelectAlgoPlanById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SelectAlgoPlanByIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PlanServiceServer).SelectAlgoPlanById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/plan.PlanService/SelectAlgoPlanById",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PlanServiceServer).SelectAlgoPlanById(ctx, req.(*SelectAlgoPlanByIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _PlanService_GetInitData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetInitDataRequest)
 	if err := dec(in); err != nil {
@@ -444,24 +480,6 @@ func _PlanService_GetInitData_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(PlanServiceServer).GetInitData(ctx, req.(*GetInitDataRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _PlanService_FindPlanByCompany_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FindPlanByCompanyRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PlanServiceServer).FindPlanByCompany(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/plan.PlanService/FindPlanByCompany",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PlanServiceServer).FindPlanByCompany(ctx, req.(*FindPlanByCompanyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -502,56 +520,38 @@ func _PlanService_UnlockPlan_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PlanService_ListPlanByIdAndType_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListPlanByIdAndTypeRequest)
+func _PlanService_CreatePlanConfirm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreatePlanRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PlanServiceServer).ListPlanByIdAndType(ctx, in)
+		return srv.(PlanServiceServer).CreatePlanConfirm(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/plan.PlanService/ListPlanByIdAndType",
+		FullMethod: "/plan.PlanService/CreatePlanConfirm",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PlanServiceServer).ListPlanByIdAndType(ctx, req.(*ListPlanByIdAndTypeRequest))
+		return srv.(PlanServiceServer).CreatePlanConfirm(ctx, req.(*CreatePlanRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PlanService_AddPlanConfirm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddPlanRequest)
+func _PlanService_CreatePlanCancel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreatePlanRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PlanServiceServer).AddPlanConfirm(ctx, in)
+		return srv.(PlanServiceServer).CreatePlanCancel(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/plan.PlanService/AddPlanConfirm",
+		FullMethod: "/plan.PlanService/CreatePlanCancel",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PlanServiceServer).AddPlanConfirm(ctx, req.(*AddPlanRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _PlanService_AddPlanCancel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddPlanRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PlanServiceServer).AddPlanCancel(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/plan.PlanService/AddPlanCancel",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PlanServiceServer).AddPlanCancel(ctx, req.(*AddPlanRequest))
+		return srv.(PlanServiceServer).CreatePlanCancel(ctx, req.(*CreatePlanRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -688,20 +688,24 @@ var PlanService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _PlanService_ListPlan_Handler,
 		},
 		{
-			MethodName: "FindPlan",
-			Handler:    _PlanService_FindPlan_Handler,
-		},
-		{
 			MethodName: "GetPlan",
 			Handler:    _PlanService_GetPlan_Handler,
 		},
 		{
-			MethodName: "GetInitData",
-			Handler:    _PlanService_GetInitData_Handler,
+			MethodName: "SelectPlanByName",
+			Handler:    _PlanService_SelectPlanByName_Handler,
 		},
 		{
-			MethodName: "FindPlanByCompany",
-			Handler:    _PlanService_FindPlanByCompany_Handler,
+			MethodName: "SelectPlanByCompany",
+			Handler:    _PlanService_SelectPlanByCompany_Handler,
+		},
+		{
+			MethodName: "SelectAlgoPlanById",
+			Handler:    _PlanService_SelectAlgoPlanById_Handler,
+		},
+		{
+			MethodName: "GetInitData",
+			Handler:    _PlanService_GetInitData_Handler,
 		},
 		{
 			MethodName: "LockPlan",
@@ -712,16 +716,12 @@ var PlanService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _PlanService_UnlockPlan_Handler,
 		},
 		{
-			MethodName: "ListPlanByIdAndType",
-			Handler:    _PlanService_ListPlanByIdAndType_Handler,
+			MethodName: "CreatePlanConfirm",
+			Handler:    _PlanService_CreatePlanConfirm_Handler,
 		},
 		{
-			MethodName: "AddPlanConfirm",
-			Handler:    _PlanService_AddPlanConfirm_Handler,
-		},
-		{
-			MethodName: "AddPlanCancel",
-			Handler:    _PlanService_AddPlanCancel_Handler,
+			MethodName: "CreatePlanCancel",
+			Handler:    _PlanService_CreatePlanCancel_Handler,
 		},
 		{
 			MethodName: "DeletePlanConfirm",
