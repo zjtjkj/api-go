@@ -25,6 +25,7 @@ type PresetClient interface {
 	CreatePreset(ctx context.Context, in *CreatePresetRequest, opts ...grpc.CallOption) (*CreatePresetReply, error)
 	DeletePreset(ctx context.Context, in *DeletePresetRequest, opts ...grpc.CallOption) (*DeletePresetReply, error)
 	GetPreset(ctx context.Context, in *GetPresetRequest, opts ...grpc.CallOption) (*GetPresetReply, error)
+	GetPresetByAlgoId(ctx context.Context, in *GetPresetByAlgoIdRequest, opts ...grpc.CallOption) (*GetPresetByAlgoIdReply, error)
 }
 
 type presetClient struct {
@@ -62,6 +63,15 @@ func (c *presetClient) GetPreset(ctx context.Context, in *GetPresetRequest, opts
 	return out, nil
 }
 
+func (c *presetClient) GetPresetByAlgoId(ctx context.Context, in *GetPresetByAlgoIdRequest, opts ...grpc.CallOption) (*GetPresetByAlgoIdReply, error) {
+	out := new(GetPresetByAlgoIdReply)
+	err := c.cc.Invoke(ctx, "/api.preset.v1.Preset/GetPresetByAlgoId", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PresetServer is the server API for Preset service.
 // All implementations must embed UnimplementedPresetServer
 // for forward compatibility
@@ -69,6 +79,7 @@ type PresetServer interface {
 	CreatePreset(context.Context, *CreatePresetRequest) (*CreatePresetReply, error)
 	DeletePreset(context.Context, *DeletePresetRequest) (*DeletePresetReply, error)
 	GetPreset(context.Context, *GetPresetRequest) (*GetPresetReply, error)
+	GetPresetByAlgoId(context.Context, *GetPresetByAlgoIdRequest) (*GetPresetByAlgoIdReply, error)
 	mustEmbedUnimplementedPresetServer()
 }
 
@@ -84,6 +95,9 @@ func (UnimplementedPresetServer) DeletePreset(context.Context, *DeletePresetRequ
 }
 func (UnimplementedPresetServer) GetPreset(context.Context, *GetPresetRequest) (*GetPresetReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPreset not implemented")
+}
+func (UnimplementedPresetServer) GetPresetByAlgoId(context.Context, *GetPresetByAlgoIdRequest) (*GetPresetByAlgoIdReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPresetByAlgoId not implemented")
 }
 func (UnimplementedPresetServer) mustEmbedUnimplementedPresetServer() {}
 
@@ -152,6 +166,24 @@ func _Preset_GetPreset_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Preset_GetPresetByAlgoId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPresetByAlgoIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PresetServer).GetPresetByAlgoId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.preset.v1.Preset/GetPresetByAlgoId",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PresetServer).GetPresetByAlgoId(ctx, req.(*GetPresetByAlgoIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Preset_ServiceDesc is the grpc.ServiceDesc for Preset service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -170,6 +202,10 @@ var Preset_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetPreset",
 			Handler:    _Preset_GetPreset_Handler,
+		},
+		{
+			MethodName: "GetPresetByAlgoId",
+			Handler:    _Preset_GetPresetByAlgoId_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
