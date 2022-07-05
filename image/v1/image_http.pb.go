@@ -24,6 +24,7 @@ const OperationImageGetImage = "/api.image.v1.Image/GetImage"
 const OperationImageGetImageByNameVersion = "/api.image.v1.Image/GetImageByNameVersion"
 const OperationImageListImage = "/api.image.v1.Image/ListImage"
 const OperationImageListAvailableImage = "/api.image.v1.Image/ListAvailableImage"
+const OperationImageListAvailableImageByName = "/api.image.v1.Image/ListAvailableImageByName"
 const OperationImageLockImage = "/api.image.v1.Image/LockImage"
 const OperationImageUnlockImage = "/api.image.v1.Image/UnlockImage"
 
@@ -33,6 +34,7 @@ type ImageHTTPServer interface {
 	GetImage(context.Context, *GetImageRequest) (*GetImageReply, error)
 	GetImageByNameVersion(context.Context, *GetImageByNameVersionRequest) (*GetImageByNameVersionReply, error)
 	ListAvailableImage(context.Context, *ListAvailableImageRequest) (*ListAvailableImageReply, error)
+	ListAvailableImageByName(context.Context, *ListAvailableImageByNameRequest) (*ListAvailableImageByNameReply, error)
 	ListImage(context.Context, *ListImageRequest) (*ListImageReply, error)
 	LockImage(context.Context, *LockImageRequest) (*LockImageReply, error)
 	UnlockImage(context.Context, *UnlockImageRequest) (*UnlockImageReply, error)
@@ -48,6 +50,7 @@ func RegisterImageHTTPServer(s *http.Server, srv ImageHTTPServer) {
 	r.GET("/api/v1/image/{name}/{version}", _Image_GetImageByNameVersion0_HTTP_Handler(srv))
 	r.GET("/api/v1/image", _Image_ListImage0_HTTP_Handler(srv))
 	r.GET("/api/v1/image/available", _Image_ListAvailableImage0_HTTP_Handler(srv))
+	r.GET("/api/v1/image/available/{name}", _Image_ListAvailableImageByName0_HTTP_Handler(srv))
 	r.POST("/api/v1/image/lock/{id}", _Image_LockImage0_HTTP_Handler(srv))
 	r.POST("/api/v1/image/unlock/{id}", _Image_UnlockImage0_HTTP_Handler(srv))
 }
@@ -197,6 +200,28 @@ func _Image_ListAvailableImage0_HTTP_Handler(srv ImageHTTPServer) func(ctx http.
 	}
 }
 
+func _Image_ListAvailableImageByName0_HTTP_Handler(srv ImageHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ListAvailableImageByNameRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationImageListAvailableImageByName)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ListAvailableImageByName(ctx, req.(*ListAvailableImageByNameRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ListAvailableImageByNameReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 func _Image_LockImage0_HTTP_Handler(srv ImageHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in LockImageRequest
@@ -247,6 +272,7 @@ type ImageHTTPClient interface {
 	GetImage(ctx context.Context, req *GetImageRequest, opts ...http.CallOption) (rsp *GetImageReply, err error)
 	GetImageByNameVersion(ctx context.Context, req *GetImageByNameVersionRequest, opts ...http.CallOption) (rsp *GetImageByNameVersionReply, err error)
 	ListAvailableImage(ctx context.Context, req *ListAvailableImageRequest, opts ...http.CallOption) (rsp *ListAvailableImageReply, err error)
+	ListAvailableImageByName(ctx context.Context, req *ListAvailableImageByNameRequest, opts ...http.CallOption) (rsp *ListAvailableImageByNameReply, err error)
 	ListImage(ctx context.Context, req *ListImageRequest, opts ...http.CallOption) (rsp *ListImageReply, err error)
 	LockImage(ctx context.Context, req *LockImageRequest, opts ...http.CallOption) (rsp *LockImageReply, err error)
 	UnlockImage(ctx context.Context, req *UnlockImageRequest, opts ...http.CallOption) (rsp *UnlockImageReply, err error)
@@ -318,6 +344,19 @@ func (c *ImageHTTPClientImpl) ListAvailableImage(ctx context.Context, in *ListAv
 	pattern := "/api/v1/image/available"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationImageListAvailableImage))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *ImageHTTPClientImpl) ListAvailableImageByName(ctx context.Context, in *ListAvailableImageByNameRequest, opts ...http.CallOption) (*ListAvailableImageByNameReply, error) {
+	var out ListAvailableImageByNameReply
+	pattern := "/api/v1/image/available/{name}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationImageListAvailableImageByName))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

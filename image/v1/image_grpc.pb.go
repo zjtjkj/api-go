@@ -29,6 +29,7 @@ type ImageClient interface {
 	GetImageByNameVersion(ctx context.Context, in *GetImageByNameVersionRequest, opts ...grpc.CallOption) (*GetImageByNameVersionReply, error)
 	ListImage(ctx context.Context, in *ListImageRequest, opts ...grpc.CallOption) (*ListImageReply, error)
 	ListAvailableImage(ctx context.Context, in *ListAvailableImageRequest, opts ...grpc.CallOption) (*ListAvailableImageReply, error)
+	ListAvailableImageByName(ctx context.Context, in *ListAvailableImageByNameRequest, opts ...grpc.CallOption) (*ListAvailableImageByNameReply, error)
 	LockImage(ctx context.Context, in *LockImageRequest, opts ...grpc.CallOption) (*LockImageReply, error)
 	UnlockImage(ctx context.Context, in *UnlockImageRequest, opts ...grpc.CallOption) (*UnlockImageReply, error)
 }
@@ -104,6 +105,15 @@ func (c *imageClient) ListAvailableImage(ctx context.Context, in *ListAvailableI
 	return out, nil
 }
 
+func (c *imageClient) ListAvailableImageByName(ctx context.Context, in *ListAvailableImageByNameRequest, opts ...grpc.CallOption) (*ListAvailableImageByNameReply, error) {
+	out := new(ListAvailableImageByNameReply)
+	err := c.cc.Invoke(ctx, "/api.image.v1.Image/ListAvailableImageByName", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *imageClient) LockImage(ctx context.Context, in *LockImageRequest, opts ...grpc.CallOption) (*LockImageReply, error) {
 	out := new(LockImageReply)
 	err := c.cc.Invoke(ctx, "/api.image.v1.Image/LockImage", in, out, opts...)
@@ -133,6 +143,7 @@ type ImageServer interface {
 	GetImageByNameVersion(context.Context, *GetImageByNameVersionRequest) (*GetImageByNameVersionReply, error)
 	ListImage(context.Context, *ListImageRequest) (*ListImageReply, error)
 	ListAvailableImage(context.Context, *ListAvailableImageRequest) (*ListAvailableImageReply, error)
+	ListAvailableImageByName(context.Context, *ListAvailableImageByNameRequest) (*ListAvailableImageByNameReply, error)
 	LockImage(context.Context, *LockImageRequest) (*LockImageReply, error)
 	UnlockImage(context.Context, *UnlockImageRequest) (*UnlockImageReply, error)
 	mustEmbedUnimplementedImageServer()
@@ -162,6 +173,9 @@ func (UnimplementedImageServer) ListImage(context.Context, *ListImageRequest) (*
 }
 func (UnimplementedImageServer) ListAvailableImage(context.Context, *ListAvailableImageRequest) (*ListAvailableImageReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListAvailableImage not implemented")
+}
+func (UnimplementedImageServer) ListAvailableImageByName(context.Context, *ListAvailableImageByNameRequest) (*ListAvailableImageByNameReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListAvailableImageByName not implemented")
 }
 func (UnimplementedImageServer) LockImage(context.Context, *LockImageRequest) (*LockImageReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LockImage not implemented")
@@ -308,6 +322,24 @@ func _Image_ListAvailableImage_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Image_ListAvailableImageByName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListAvailableImageByNameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ImageServer).ListAvailableImageByName(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.image.v1.Image/ListAvailableImageByName",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ImageServer).ListAvailableImageByName(ctx, req.(*ListAvailableImageByNameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Image_LockImage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LockImageRequest)
 	if err := dec(in); err != nil {
@@ -378,6 +410,10 @@ var Image_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListAvailableImage",
 			Handler:    _Image_ListAvailableImage_Handler,
+		},
+		{
+			MethodName: "ListAvailableImageByName",
+			Handler:    _Image_ListAvailableImageByName_Handler,
 		},
 		{
 			MethodName: "LockImage",
